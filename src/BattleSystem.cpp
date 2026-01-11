@@ -5,6 +5,7 @@
 #include "BattleSystem.h"
 #include "PlayerAction.h"
 #include "MonsterAction.h"
+#include "Inventory.h"
 #include "Random.h"
 #include "ItemFactory.h"
 
@@ -62,13 +63,12 @@ void BattleSystem::player_turn()
     {
         is_turn_end = true;
         clear_screen();
-        print_status(monster, player);
-        print_menu();
+        UI.print_status(monster, player);
+        UI.print_menu();
         if (!(std::cin >> reply)) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "잘못된 입력!!" << std::endl;
-            delay(1000);
+            UI.print_error_screen();
             continue;
         }
         std::cout << std::endl;
@@ -89,7 +89,8 @@ void BattleSystem::player_turn()
             is_turn_end = p_controller.escape(&is_escaped);
             return;
         default :
-            std::cout << "잘못된 입력!!" << std::endl;
+            is_turn_end = false;
+            UI.print_error_screen();
             break;
         }
         delay(1000);
@@ -135,19 +136,29 @@ bool BattleSystem::is_battle_end()
 void BattleSystem::reward(Monster &monster, Player &player)
 {
     ItemFactory itemFactory;
+
     int cur_gold = player.get_inventory().show_gold();
-    player.get_inventory().earn_gold(monster.get_drop_gold());
-    std::cout << monster.get_drop_gold() << " 골드를 얻었다! (현재 골드 : " << cur_gold + monster.get_drop_gold() << ")" << std::endl;
+    int drop_gold = monster.get_drop_gold();
+    player.get_inventory().earn_gold(drop_gold);
+    UI.print_get_gold(drop_gold, cur_gold + drop_gold);
+    
+    delay(1000);
+
+    int roll = Random::range(1, 100);
+
     for (const auto &drop : monster.get_drop_table())
     {        
-        int roll = Random::range(1, 100);
         if (roll <= drop.chance)
         {
-            auto item = itemFactory.create(drop.create()->get_id());
-            std::cout << "아이템을 획득했다!!" << std::endl;
-            std::cout << "획득한 아이템 : " << item->get_name() << std::endl;
+            auto item = itemFactory.create(drop.id);
+            if (!item) {
+                std::cout << "드랍 아이템 생성 실패." << std::endl;
+                return;
+            }
+            UI.print_get_item(item->get_name());
             player.get_inventory().add_item(std::move(item));
             break;
         }
+        roll -= drop.chance;
     }
 }

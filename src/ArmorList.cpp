@@ -8,13 +8,21 @@
 
 NormalArmor::NormalArmor(const std::string name, ItemType type, int price) : Armor(name, type, price)
 {
-    set_id(ItemId::NormalArmor);
+    set_id(ItemID::NormalArmor);
     set_armor_defend(4);
 }
 GoblinArmor::GoblinArmor(const std::string name, ItemType type, int price) : Armor(name, type, price)
 {
-    set_id(ItemId::GoblinArmor);
+    set_id(ItemID::GoblinArmor);
     set_armor_hp(10);
     set_armor_defend(7);
     set_armor_vigor(5);
+}
+
+DragonArmor::DragonArmor(const std::string name, ItemType type, int price) : Armor(name, type, price)
+{
+    set_id(ItemID::DragonArmor);
+    set_armor_hp(50);
+    set_armor_defend(15);
+    set_armor_vigor(10);
 }

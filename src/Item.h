@@ -4,7 +4,7 @@
  ******************************************/
 #pragma once
 #include "ItemType.h"
-#include "ItemId.h"
+#include "ItemID.h"
 #include <string>
 
 class Item
@@ -13,17 +13,22 @@ public :
     Item(std::string name, ItemType type, int price);
     virtual ~Item();
 
-    ItemId get_id() const;
-    void set_id(ItemId _id);
+    ItemID get_id() const;
+    void set_id(ItemID _id);
     std::string get_name() const;
+    std::string get_name(ItemID id) const;
     ItemType get_type() const;
     int get_price() const;
+
+    bool is_stackable() const;
+    void set_stackable(bool _is);
 
     //virtual void use() = 0;
 
 protected :
-    ItemId id;
+    ItemID id;
     std::string name;
     ItemType type;
     int price;
+    bool stackable = true;
 };

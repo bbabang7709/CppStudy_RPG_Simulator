@@ -7,6 +7,7 @@
 #include "Weapon.h"
 #include "Armor.h"
 #include "Inventory.h"
+#include "ShopItem.h"
 
 class Player : public Character
 {
@@ -26,16 +27,26 @@ public :
     void set_base_defend(int _defend);
     void set_base_vigor(int _vigor); 
 
+    void attack(Character &target);
+
+    void reset_player();
+
     Weapon *get_my_weapon() const;
     Armor *get_my_armor() const;
     std::string get_weapon_name() const;
     std::string get_armor_name() const;
-    void equip_item(std::unique_ptr<Item> item);
+    bool equip_item(std::unique_ptr<Item> item);
+    bool try_equip_inventory_item(int index);
     std::unique_ptr<Weapon> unequip_Weapon();
     std::unique_ptr<Armor> unequip_Armor();
 
-    void attack(Character &target);
+    int calc_expand_cost();
+    bool expand_inventory();
     Inventory &get_inventory();
+
+    bool buy_item(const ShopItem &item); // 1개만 구입
+    bool buy_item(const ShopItem &item, int count); // (count)개 구입
+    bool sell_item(int inventory_index, int count); // (count)개 판매
 
 protected :
     Inventory inventory;

@@ -3,25 +3,13 @@
  *  화면 출력 등을 담당하는 시스템 호출
  ******************************************/
 #include "Sys.h"
-#include "Monster.h"
-#include "Player.h"
-
 #include <iostream>
 #include <thread>
 #include <chrono>
-using namespace std;
+#include <limits>
+#include <string>
 
-void Sys::print_status(Monster &mon, Player &player)
-{
-    cout << "-----------------------------------------------------" << endl;
-    cout << "[" << mon.get_name() << "]" << endl;
-    cout << "HP : " << mon.get_hp() << " / " << mon.get_max_hp() << endl;
-    cout << "MP : " << mon.get_mp() << endl << endl;
-    cout << "[플레이어]" << endl;
-    cout << "HP : " << player.get_hp() << " / " << player.get_max_hp() << endl;
-    cout << "MP : " << player.get_mp() << endl << endl;
-    cout << "-----------------------------------------------------" << endl;
-}
+
 
 void Sys::clear_screen()
 {
@@ -29,15 +17,42 @@ void Sys::clear_screen()
     system("cls");
 }
 
-void Sys::print_menu()
-{
-    cout << endl;
-    cout << "무엇을 할까 ??" << endl;
-    cout << "1. 일반공격 2. 특수공격 3. 회복   4. 도망" << endl; 
-    cout << "선택 >>> ";
-}
-
 void Sys::delay(int milliseconds)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+}
+int Sys::safe_int_input()
+{
+    std::string input;
+    std::cin >> input;
+
+    try {
+        size_t idx;
+        int value =std::stoi(input, &idx);
+
+        if (idx != input.size()) {
+            return -1;
+        }
+
+        return value;
+    }
+    catch (...) {
+        return -1;
+    }
+}
+int Sys::safe_int_input(int min, int max)
+{
+    std::string input;
+    std::cin >> input;
+
+    try {
+        int value = std::stoi(input);
+        if (value < min || value > max) 
+            return -1;
+        
+        return value;
+    }
+    catch (...) {
+        return -1;
+    }
 }

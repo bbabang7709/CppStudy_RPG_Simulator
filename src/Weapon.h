@@ -4,6 +4,7 @@
  ******************************************/
 #pragma once
 #include "Item.h"
+#include "Sys.h"
 
 class Character;
 class Player;
@@ -36,4 +37,6 @@ protected :
     int weapon_mp;
     int weapon_vigor;
     int cost;
+    Sys system;
+
 };

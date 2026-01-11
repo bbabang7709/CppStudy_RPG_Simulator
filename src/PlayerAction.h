@@ -1,6 +1,6 @@
 /*****************************************
  *  File_name : PlayerAction.h
- *  플레이어가 할 수 있는 행동의 종류
+ *  플레이어의 모든 선택지 관리
  ******************************************/
 #pragma once
 
@@ -21,4 +21,11 @@ enum class MenuSelection
     Save,
     Load,
     Exit
+};
+
+enum class MonsterType
+{
+    Exit = 0,
+    NormalMonster,
+    BossMonster
 };

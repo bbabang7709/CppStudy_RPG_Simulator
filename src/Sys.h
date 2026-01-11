@@ -4,14 +4,11 @@
  ******************************************/
 #pragma once
 
-class Monster;
-class Player;
-
 class Sys
 {
 public :
     void clear_screen();
-    void print_status(Monster &mon, Player &player);
-    void print_menu();
     void delay(int milliseconds);
+    int safe_int_input();
+    int safe_int_input(int min, int max);
 };

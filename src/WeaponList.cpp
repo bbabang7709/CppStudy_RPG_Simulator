@@ -7,7 +7,7 @@
 
 NormalWeapon::NormalWeapon(const std::string name, ItemType type, int price) : Weapon(name, type, price)
 {
-    set_id(ItemId::NormalWeapon);
+    set_id(ItemID::NormalWeapon);
     set_weapon_power(10);
     set_weapon_defend(0);
     set_cost(2);
@@ -18,7 +18,7 @@ void NormalWeapon::special_attack(Player &user, Character &target)
     if (cur_mp >= cost) {
         user.set_mp(cur_mp - cost);
         std::cout << "강력 회전 공격!!" << std::endl;
-        int dmg = target.take_damage(2 * weapon_power);
+        int dmg = target.take_damage(1.2 * user.get_power());
         std::cout << "몬스터는 " << dmg << " 데미지를 입었다!!" << std::endl;
     } else {
         std::cout << "특수 기술을 사용할 MP가 부족합니다. (" << cost << " MP 필요)" << std::endl;
@@ -28,7 +28,7 @@ void NormalWeapon::special_attack(Player &user, Character &target)
 
 SlimeSword::SlimeSword(const std::string name, ItemType type, int price) : Weapon(name, type, price)
 {
-    set_id(ItemId::SlimeSword);
+    set_id(ItemID::SlimeSword);
     set_weapon_power(30);
     set_weapon_defend(3);
     set_weapon_vigor(20);
@@ -40,7 +40,7 @@ void SlimeSword::special_attack(Player &user, Character &target)
     if (cur_mp >= cost) {
         user.set_mp(cur_mp - cost);
         std::cout << "슬라임 슬래시!!" << std::endl;
-        int dmg = target.take_damage(2 * weapon_power);
+        int dmg = target.take_damage(1.5 * user.get_power());
         std::cout << "몬스터는 " << dmg << " 데미지를 입었다!!" << std::endl;
     } else {
         std::cout << "특수 기술을 사용할 MP가 부족합니다. (" << cost << " MP 필요)" << std::endl;
@@ -50,7 +50,7 @@ void SlimeSword::special_attack(Player &user, Character &target)
 
 PowerGauntlet::PowerGauntlet(const std::string name, ItemType type, int price) : Weapon(name, type, price)
 {
-    set_id(ItemId::PowerGauntlet);
+    set_id(ItemID::PowerGauntlet);
     set_weapon_power(45);
     set_weapon_defend(8);
     set_weapon_hp(30);
@@ -62,7 +62,37 @@ void PowerGauntlet::special_attack(Player &user, Character &target)
     if (cur_mp >= cost) {
         user.set_mp(cur_mp - cost);
         std::cout << "파워 스트라이크!!" << std::endl;
-        int dmg = target.take_damage(3 * weapon_power);
+        int dmg = target.take_damage(1.8 * user.get_power());
+        std::cout << "몬스터는 " << dmg << " 데미지를 입었다!!" << std::endl;
+    } else {
+        std::cout << "특수 기술을 사용할 MP가 부족합니다. (" << cost << " MP 필요)" << std::endl;
+    }
+    std::cout << std::endl;
+}
+
+DragonSpear::DragonSpear(const std::string name, ItemType type, int price) : Weapon(name, type, price)
+{
+    set_id(ItemID::DragonSpear);
+    set_weapon_power(70);
+    set_weapon_defend(10);
+    set_weapon_hp(50);
+    set_weapon_mp(5);
+    set_weapon_vigor(5);
+    set_cost(7);
+}
+void DragonSpear::special_attack(Player &user, Character &target)
+{
+    int cur_mp = user.get_mp();
+    if (cur_mp >= cost) {
+        user.set_mp(cur_mp - cost);
+        std::cout << "용성락";
+        for (int i = 0 ; i < 6 ; i++) {
+            std::cout << ".";
+            system.delay(100);
+        }
+        std::cout << "!" << std::endl;
+        system.delay(1000);
+        int dmg = target.take_damage(3 * user.get_power());
         std::cout << "몬스터는 " << dmg << " 데미지를 입었다!!" << std::endl;
     } else {
         std::cout << "특수 기술을 사용할 MP가 부족합니다. (" << cost << " MP 필요)" << std::endl;

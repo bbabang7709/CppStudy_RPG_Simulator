@@ -16,5 +16,5 @@ public :
 class LoadManager : public Sys
 {
 public :
-    void Load(Player &player);
+    void Load(Player &player, std::string file_name);
 };

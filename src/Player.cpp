@@ -3,6 +3,7 @@
  *  모험을 진행하는 플레이어 클래스
  ******************************************/
 #include "Player.h"
+#include "InventoryExpand.h"
 #include <algorithm>
 #include <iostream>
 
@@ -51,6 +52,24 @@ void Player::set_base_vigor(int _vigor)
     base_vigor = _vigor;
 }
 
+void Player::attack(Character &target)
+{
+    target.take_damage(power);
+}
+
+void Player::reset_player()
+{
+    set_hp(base_hp);
+    set_mp(0);
+    set_defend(base_defend);
+    set_power(base_power);
+    set_vigor(base_vigor);
+    if (get_my_weapon())
+        unequip_Weapon();
+    if (get_my_armor())
+        unequip_Armor();
+}
+
 Weapon *Player::get_my_weapon() const
 {
     return my_weapon.get();
@@ -71,15 +90,16 @@ std::string Player::get_armor_name() const
     return my_armor ? my_armor->get_name() : "없음";
 }
 
-void Player::equip_item(std::unique_ptr<Item> item)
+bool Player::equip_item(std::unique_ptr<Item> item)
 {
+    if (!item) return false;
     switch(item->get_type())
     {
         case ItemType::Weapon :
         {
             auto weapon = std::unique_ptr<Weapon>(dynamic_cast<Weapon *>(item.release()));
             if (!weapon)
-                return;
+                return false;
             if (my_weapon)
                 get_inventory().add_item(unequip_Weapon());
             set_max_hp(max_hp + weapon->get_weapon_hp());
@@ -94,7 +114,7 @@ void Player::equip_item(std::unique_ptr<Item> item)
         {
             auto armor = std::unique_ptr<Armor>(dynamic_cast<Armor *>(item.release()));
             if (!armor)
-                return;
+                return false;
             if (my_armor)
                 get_inventory().add_item(unequip_Armor());
             set_max_hp(max_hp + armor->get_armor_hp());
@@ -105,11 +125,27 @@ void Player::equip_item(std::unique_ptr<Item> item)
             my_armor = std::move(armor);
             break;
         }
+        case ItemType::Meterial :
+            return false;
         default :
-        {
-            std::cout << "착용할 수 없는 아이템입니다." << std::endl;
-            break;
-        }
+            return false;
+    }
+    return true;
+}
+bool Player::try_equip_inventory_item(int slot_index)
+{
+    ItemSlot slot = inventory.take_slot(slot_index, 1);
+    if (!slot.item)
+        return false;
+    
+    ItemID id = slot.item->get_id();
+
+    if (equip_item(std::move(slot.item))) {
+        return true;
+    } else {
+        slot.item = ItemFactory::create(id);
+        inventory.add_slot(std::move(slot));
+        return false;
     }
 }
 
@@ -137,9 +173,57 @@ std::unique_ptr<Armor> Player::unequip_Armor()
     }
 }
 
-void Player::attack(Character &target)
+bool Player::expand_inventory()
 {
-    target.take_damage(power);
+    int level = inventory.get_expansion_count();
+    int max_level = inventory.get_max_expansion_count();
+    if (level >= max_level) 
+        return false;
+    
+    const auto &data = cost_table[level];
+    int my_gold = inventory.show_gold();
+    if (my_gold < data.cost)
+        return false;
+    
+    inventory.spend_gold(data.cost);
+    inventory.expand_inventory(data.add_slots);
+    inventory.increase_expansion_count(1);
+
+    return true;
 }
 
 Inventory &Player::get_inventory() { return inventory; }
+
+bool Player::buy_item(const ShopItem &item)
+{
+    int cur_gold = get_inventory().show_gold();
+    if (cur_gold < item.price)
+        return false;
+    get_inventory().spend_gold(item.price);
+    if (!get_inventory().add_item(ItemFactory::create(item.id)))
+        return false;
+    return true;
+}
+
+bool Player::buy_item(const ShopItem &item, int count)
+{
+    int cur_gold = get_inventory().show_gold();
+    int spend_gold = item.price * count;
+    if (cur_gold < spend_gold)
+        return false;
+    get_inventory().spend_gold(spend_gold);
+    if (!get_inventory().add_item(ItemFactory::create(item.id), count))
+        return false;
+    return true;
+}
+
+bool Player::sell_item(int inventory_index, int count)
+{
+    int earned = 0;
+    int index = inventory_index - 1;
+    if (!get_inventory().sell_slot(index, count, earned))
+        return false;
+    
+    get_inventory().earn_gold(earned);
+    return true;
+}

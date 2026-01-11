@@ -8,6 +8,7 @@
 #include "Monster.h"
 #include "MonsterAI.h"
 #include "Sys.h"
+#include "GameUI.h"
 
 
 class Player;
@@ -28,6 +29,7 @@ private :
     PlayerController &p_controller;
     Monster &monster;
     MonsterAI &ai;
+    GameUI UI;
     int turn;
     bool is_escaped;
     void player_turn();

@@ -1,0 +1,47 @@
+/*****************************************
+ *  File_name : BossMonsterList.cpp
+ *  보스 몬스터 리스트 관리
+ ******************************************/
+#include "BossMonsterList.h"
+#include "WeaponList.h"
+#include "ArmorList.h"
+#include "MeterialList.h"
+#include <iostream>
+
+Dragon::Dragon() : Monster("드래곤", 100)
+{
+    set_max_hp(500);
+    set_hp(500);
+    set_max_mp(15);
+    set_mp(5);
+    set_power(60);
+    set_defend(15);
+    set_vigor(30);
+
+    drop_table = {
+        { 51, ItemID::ReinforceStone },
+        {50, ItemID::DragonScale},
+        {10, ItemID::SoulStone_Dragon},
+        {3, ItemID::DragonArmor},
+        {1, ItemID::DragonSpear}
+    };
+}
+const std::vector<DropItem> &Dragon::get_drop_table() const
+{
+    return drop_table;
+}
+void Dragon::special_pattern(Character &target)
+{
+    std::cout << "드 "; system.delay(300);
+    std::cout << "레 "; system.delay(300);
+    std::cout << "곤 "; system.delay(300);
+    std::cout << "브 "; system.delay(300);
+    std::cout << "레 "; system.delay(300);
+    std::cout << "스 "; system.delay(300);
+    for (int i = 0; i < 5; i++) {
+            std::cout << "!";
+            system.delay(300);
+    }
+    int dmg = target.take_damage(120);
+    std::cout << "플레이어는 " << dmg << " 데미지를 입었다!!" << std::endl;   
+}

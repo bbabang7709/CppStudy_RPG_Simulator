@@ -18,3 +18,9 @@ class GoblinArmor : public Armor
 public :    
     GoblinArmor(const std::string name, ItemType type, int price);
 };
+
+class DragonArmor : public Armor
+{
+public :    
+   DragonArmor(const std::string name, ItemType type, int price);
+};

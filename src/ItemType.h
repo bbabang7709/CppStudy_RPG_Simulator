@@ -8,5 +8,6 @@ enum class ItemType
 {
     Weapon,
     Armor,
-    Potion
+    Potion,
+    Meterial
 };

@@ -10,5 +10,5 @@
 struct DropItem
 {
     int chance;
-    std::function<std::unique_ptr<Item>()> create;
+    ItemID id;
 };

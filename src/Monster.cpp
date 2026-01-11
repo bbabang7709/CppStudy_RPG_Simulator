@@ -33,8 +33,8 @@ void Monster::strong_attack(Character &target)
 }
 void Monster::defend()
 {
-    int def = get_defend() + 5;
-    int pow = get_power() - 3;
+    int def = get_defend() + 2;
+    int pow = get_power() - 2;
     set_defend(def);
     set_power(pow);
     std::cout << "몬스터가 방어자세를 취했다!!" << std::endl;

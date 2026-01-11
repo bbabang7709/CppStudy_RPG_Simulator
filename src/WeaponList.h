@@ -28,3 +28,10 @@ public :
     PowerGauntlet(const std::string name, ItemType type, int price);
     void special_attack(Player &user, Character &target) override;
 };
+
+class DragonSpear : public Weapon
+{
+public :
+    DragonSpear(const std::string name, ItemType type, int price);
+    void special_attack(Player &user, Character &target) override;
+};
