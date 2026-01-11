@@ -8,18 +8,23 @@ SRC = src/main.cpp \
       src/Player.cpp \
       src/Weapon.cpp \
       src/Armor.cpp \
+      src/Meterial.cpp \
       src/Monster.cpp \
-      src/MonsterList.cpp \
+      src/NormalMonsterList.cpp \
+      src/BossMonsterList.cpp \
       src/MonsterAI.cpp \
       src/PlayerController.cpp \
       src/Random.cpp \
       src/Sys.cpp \
       src/BattleSystem.cpp \
+      src/GameUI.cpp \
       src/WeaponList.cpp \
       src/ArmorList.cpp \
+      src/MeterialList.cpp \
       src/Inventory.cpp \
-      src/MainMenu.cpp \
-      src/SaveSystem.cpp
+      src/GameProcess.cpp \
+      src/SaveSystem.cpp \
+      src/Shop.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
