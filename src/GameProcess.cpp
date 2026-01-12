@@ -133,36 +133,7 @@ void GameProcess::forge_process(Player &player)
                 if (index == 0) 
                     break;
                 EnhanceResult result = player.enhance_item(index);
-                switch (result) 
-                {
-                case EnhanceResult::Success :
-                    std::cout << "성공!!" << std::endl;
-                    delay(1000);
-                    break;
-                case EnhanceResult::Failed :
-                    std::cout << "실패..." << std::endl;
-                    delay(1000);
-                    break;
-                case EnhanceResult::MaxLevel :
-                    std::cout << "이미 최대로 강화했습니다." << std::endl;
-                    delay(1000);
-                    break;
-                case EnhanceResult::noMeterial :
-                    std::cout << "필요한 재료가 부족합니다." << std::endl;
-                    delay(1000);
-                    break;
-                case EnhanceResult::Destroyed :
-                    delay(1000);
-                    break;
-                case EnhanceResult::Error :
-                    std::cout << "오류가 발생했습니다." << std::endl;
-                    delay(1000);
-                    break;
-                default :
-                    std::cout << "오류가 발생했습니다." << std::endl;
-                    delay(1000);
-                    break;
-                }
+                UI.print_forge_result(result);
             }
         }
     }
@@ -301,11 +272,8 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
             }
             break;
         }
-        case MenuSelection::Shop :
-            shop_process(player);
-            break;
-        case MenuSelection::Forge :
-            forge_process(player);
+        case MenuSelection::Commerse :
+            CP.run(player);
             break;
         case MenuSelection::Save :
         {

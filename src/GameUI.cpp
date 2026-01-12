@@ -22,11 +22,10 @@ void GameUI::print_mainMenu()
     std::cout << "1. 전투 시작" << std::endl;
     std::cout << "2. 플레이어 정보" << std::endl;
     std::cout << "3. 인벤토리 확인" << std::endl;
-    std::cout << "4. 상점" << std::endl;
-    std::cout << "5. 대장간" << std::endl;
-    std::cout << "6. 저장하기" << std::endl;
-    std::cout << "7. 불러오기" << std::endl;
-    std::cout << "8. 종료" << std::endl;
+    std::cout << "4. 상업지구 입장" << std::endl;
+    std::cout << "5. 저장하기" << std::endl;
+    std::cout << "6. 불러오기" << std::endl;
+    std::cout << "7. 종료" << std::endl;
     std::cout << "==============================" << std::endl;
     std::cout << "입력 >>> ";
 }
@@ -48,58 +47,7 @@ void GameUI::print_menu()
     std::cout << "1. 일반공격 2. 특수공격 3. 회복   4. 도망" << std::endl; 
     std::cout << "선택 >>> ";
 }
-void GameUI::print_shop_menu()
-{
-    clear_screen();
-    std::cout << "상점에 오신 것을 환영합니다!!";
-    delay(1000);
 
-    std::cout << std::endl << std::endl << "무엇을 도와드릴까요???" << std::endl;
-    std::cout << "(0 : 돌아가기 1 : 아이템 구매 2 : 아이템 판매)" << std::endl;
-    std::cout << "입력 >>> ";
-}
-void GameUI::print_shop_buy_menu()
-{
-    std::cout << "어떤 아이템을 구매하시겠습니까?? (0 : 돌아가기)" << std::endl;
-    std::cout << "입력 >>> ";
-}
-void GameUI::print_shop_buy_result(bool TF)
-{
-    if (TF)
-        std::cout << "성공적으로 구매했습니다!!" << std::endl;
-    else 
-        std::cout << "구매에 실패했습니다..." << std::endl;
-    delay(1000);
-}
-void GameUI::print_shop_sell_menu()
-{
-    std::cout << "어떤 아이템을 판매하시겠습니까?? (0 : 돌아가기)" << std::endl;
-    std::cout << "입력 >>> ";
-}
-void GameUI::print_ask_sell_count()
-{
-    std::cout << "몇 개를 판매하시겠습니까?? (0 : 돌아가기)" << std::endl;
-    std::cout << "입력 >>> ";
-}
-void GameUI::print_shop_sell_result(bool TF)
-{
-    if (TF)
-        std::cout << "성공적으로 판매했습니다!!" << std::endl;
-    else 
-        std::cout << "판매에 실패했습니다..." << std::endl;
-    delay(1000);
-}
-void GameUI::print_forge_menu()
-{
-    std::cout << "이곳은 대장간입니다. 무엇을 하시겠습니까?" << std::endl;
-    std::cout << "(0 : 돌아가기 1 : 장비 강화)" << std::endl;
-    std::cout << "입력 >>> ";
-}
-void GameUI::print_enhance_selection()
-{
-    std::cout << "강화할 장비를 선택하세요. (0 : 돌아가기)" << std::endl;
-    std::cout << "입력 >>> ";
-}
 void GameUI::print_playerInfo(const Player &player)
 {
     clear_screen();
@@ -220,5 +168,97 @@ void GameUI::print_exit_menu()
 void GameUI::print_error_screen()
 {
     std::cout << "잘못된 입력!!!" << std::endl;
+    delay(1000);
+}
+
+
+void GameUI::print_commercialArea_menu()
+{
+    std::cout << "상업지구에 오신 것을 환영합니다!!!" << std::endl;
+    delay(1000);
+    std::cout << "무엇을 하시겠습니까??" << std::endl;
+    std::cout << "(0 : 돌아가기 1 : 상점 2 : 대장간)" << std::endl;
+    std::cout << "입력 >>> ";
+}
+void GameUI::print_shop_menu()
+{
+    clear_screen();
+    std::cout << "상점에 오신 것을 환영합니다!!";
+    delay(1000);
+
+    std::cout << std::endl << std::endl << "무엇을 도와드릴까요???" << std::endl;
+    std::cout << "(0 : 돌아가기 1 : 아이템 구매 2 : 아이템 판매)" << std::endl;
+    std::cout << "입력 >>> ";
+}
+void GameUI::print_shop_buy_menu()
+{
+    std::cout << "어떤 아이템을 구매하시겠습니까?? (0 : 돌아가기)" << std::endl;
+    std::cout << "입력 >>> ";
+}
+void GameUI::print_shop_buy_result(bool TF)
+{
+    if (TF)
+        std::cout << "성공적으로 구매했습니다!!" << std::endl;
+    else 
+        std::cout << "구매에 실패했습니다..." << std::endl;
+    delay(1000);
+}
+void GameUI::print_shop_sell_menu()
+{
+    std::cout << "어떤 아이템을 판매하시겠습니까?? (0 : 돌아가기)" << std::endl;
+    std::cout << "입력 >>> ";
+}
+void GameUI::print_ask_sell_count()
+{
+    std::cout << "몇 개를 판매하시겠습니까?? (0 : 돌아가기)" << std::endl;
+    std::cout << "입력 >>> ";
+}
+void GameUI::print_shop_sell_result(bool TF)
+{
+    if (TF)
+        std::cout << "성공적으로 판매했습니다!!" << std::endl;
+    else 
+        std::cout << "판매에 실패했습니다..." << std::endl;
+    delay(1000);
+}
+void GameUI::print_forge_menu()
+{
+    std::cout << "이곳은 대장간입니다. 무엇을 하시겠습니까?" << std::endl;
+    std::cout << "(0 : 돌아가기 1 : 장비 강화)" << std::endl;
+    std::cout << "입력 >>> ";
+}
+void GameUI::print_enhance_selection()
+{
+    std::cout << "강화할 장비를 선택하세요. (0 : 돌아가기)" << std::endl;
+    std::cout << "입력 >>> ";
+}
+void GameUI::print_forge_result(EnhanceResult result)
+{
+    switch (result)
+    {
+    case EnhanceResult::Success :
+        std::cout << "성공!!" << std::endl;
+        break;
+    case EnhanceResult::Failed :
+        std::cout << "실패..." << std::endl;
+        break;
+    case EnhanceResult::MaxLevel :
+        std::cout << "이미 최대로 강화했습니다." << std::endl;
+        break;
+    case EnhanceResult::noMeterial :
+        std::cout << "필요한 재료가 부족합니다." << std::endl;
+        break;
+    case EnhanceResult::Destroyed :
+        std::cout << "장비가 파괴되었습니다..." << std::endl;
+        break;
+    case EnhanceResult::Disable :
+        std::cout << "강화할 수 없는 아이템입니다." << std::endl;
+        break;
+    case EnhanceResult::Error :
+        std::cout << "오류가 발생했습니다." << std::endl;
+        break;
+    default : 
+        break;
+    }
     delay(1000);
 }

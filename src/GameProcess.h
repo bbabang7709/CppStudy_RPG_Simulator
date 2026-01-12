@@ -4,6 +4,7 @@
  ******************************************/
 #pragma once
 #include "Sys.h"
+#include "CommercialProcess.h"
 #include "BattleSystem.h"
 #include "GameUI.h"
 
@@ -21,4 +22,5 @@ public :
 
 private :
     GameUI UI;
+    CommercialProcess CP;
 };

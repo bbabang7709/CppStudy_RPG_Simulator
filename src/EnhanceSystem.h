@@ -22,6 +22,7 @@ enum class EnhanceResult
     Destroyed,
     MaxLevel,
     noMeterial,
+    Disable,
     Error
 };
 

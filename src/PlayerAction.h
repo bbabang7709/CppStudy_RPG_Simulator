@@ -17,8 +17,7 @@ enum class MenuSelection
     BattleStart = 1,
     PlayerInfo,
     Inventory,
-    Shop,
-    Forge,
+    Commerse,
     Save,
     Load,
     Exit

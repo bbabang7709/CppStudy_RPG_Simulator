@@ -27,7 +27,8 @@ SRC = src/main.cpp \
       src/GameProcess.cpp \
       src/SaveSystem.cpp \
       src/Shop.cpp \
-      src/EnhanceSystem.cpp
+      src/EnhanceSystem.cpp \
+      src/CommercialProcess.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

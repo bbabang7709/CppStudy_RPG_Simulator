@@ -193,6 +193,8 @@ EnhanceResult Player::enhance_item(int inventory_index)
 
     auto &slot = slots[index];
     
+    if (!slot.item->is_enhanceable())
+        return EnhanceResult::Disable;
     auto target_item = dynamic_cast<Equipment *>(slot.item.get());
     if (!target_item)
         return EnhanceResult::Error;

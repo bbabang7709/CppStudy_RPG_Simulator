@@ -3,6 +3,7 @@
  ******************************************/
 #include "Sys.h"
 #include "GameProcess.h"
+#include "CommercialProcess.h"
 #include "SaveSystem.h"
 #include "GameUI.h"
 #include "BattleSystem.h"
