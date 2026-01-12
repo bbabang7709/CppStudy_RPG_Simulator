@@ -5,12 +5,13 @@
 #pragma once
 #include "ItemType.h"
 #include "ItemID.h"
+#include "ItemDatabase.h"
 #include <string>
 
 class Item
 {
 public :
-    Item(std::string name, ItemType type, int price);
+    Item(const ItemData &data);
     virtual ~Item();
 
     ItemID get_id() const;

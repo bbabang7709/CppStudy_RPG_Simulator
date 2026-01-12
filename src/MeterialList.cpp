@@ -4,17 +4,8 @@
  ******************************************/
 #include "MeterialList.h"
 
-ReinforceStone::ReinforceStone(std::string name, ItemType type, int price) : Meterial(name, type, price)
-{
-    set_id(ItemID::ReinforceStone);
-}
+ReinforceStone::ReinforceStone() : Meterial(ItemDatabase::get(ItemID::ReinforceStone)) {}
 
-DragonScale::DragonScale(std::string name, ItemType type, int price) : Meterial(name, type, price) 
-{
-    set_id(ItemID::DragonScale);
-}
+DragonScale::DragonScale() : Meterial(ItemDatabase::get(ItemID::DragonScale)) {}
 
-SoulStone_Dragon::SoulStone_Dragon(std::string name, ItemType type, int price) : Meterial(name, type, price) 
-{
-    set_id(ItemID::SoulStone_Dragon);
-}
+SoulStone_Dragon::SoulStone_Dragon() : Meterial(ItemDatabase::get(ItemID::SoulStone_Dragon)) {}

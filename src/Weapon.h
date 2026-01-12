@@ -4,6 +4,7 @@
  ******************************************/
 #pragma once
 #include "Item.h"
+#include "ItemDatabase.h"
 #include "Sys.h"
 
 class Character;
@@ -12,7 +13,7 @@ class Player;
 class Weapon : public Item
 {
 public :
-    Weapon(const std::string name, ItemType type, int price);
+    Weapon(const ItemData &data);
     virtual ~Weapon();
     int get_weapon_power() const;
     int get_weapon_defend() const;

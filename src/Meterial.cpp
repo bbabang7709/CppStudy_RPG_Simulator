@@ -4,7 +4,7 @@
  ******************************************/
 #include "Meterial.h"
 
-Meterial::Meterial(const std::string name, ItemType type, int price) : Item(name, type, price)
+Meterial::Meterial(const ItemData &data) : Item(data)
 {
     set_stackable(true);
 }

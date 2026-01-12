@@ -5,18 +5,22 @@
 #include "Shop.h"
 #include "Item.h"
 #include "ItemID.h"
+#include "ItemDatabase.h"
 #include "ItemFactory.h"
+#include "WeaponList.h"
+#include "ArmorList.h"
 #include <iostream>
 #include <vector>
 
 Shop::Shop()
 {
     items = {
-        {ItemID::NormalArmor, "낡은 가죽 갑옷", 30},
-        {ItemID::NormalWeapon, "녹슨 단검", 70}
+        ItemDatabase::get(ItemID::NormalArmor),
+        ItemDatabase::get(ItemID::NormalWeapon),
+        ItemDatabase::get(ItemID::ReinforceStone)
     };
 
-    no_item = {ItemID::None, "", 0};
+    no_item = ItemDatabase::get(ItemID::None);
     slot_size = items.size();
 }
 
@@ -30,7 +34,7 @@ void Shop::list_items() const
     std::cout << "------------------------------" << std::endl;
 }
 
-const ShopItem &Shop::get_item(int index) const
+const ItemData &Shop::get_item(int index) const
 {
     if (index < 0 || index > (int)items.size())
         return no_item;

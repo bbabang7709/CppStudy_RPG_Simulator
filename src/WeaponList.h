@@ -10,7 +10,7 @@
 class NormalWeapon : public Weapon
 {
 public :
-    NormalWeapon(const std::string name, ItemType type, int price);
+    NormalWeapon();
     void special_attack(Player &user, Character &target) override;
     //void use() override;
 };
@@ -18,20 +18,20 @@ public :
 class SlimeSword : public Weapon
 {
 public :
-    SlimeSword(const std::string name, ItemType type, int price);
+    SlimeSword();
     void special_attack(Player &user, Character &target) override;
 };
 
 class PowerGauntlet : public Weapon
 {
 public :
-    PowerGauntlet(const std::string name, ItemType type, int price);
+    PowerGauntlet();
     void special_attack(Player &user, Character &target) override;
 };
 
 class DragonSpear : public Weapon
 {
 public :
-    DragonSpear(const std::string name, ItemType type, int price);
+    DragonSpear();
     void special_attack(Player &user, Character &target) override;
 };

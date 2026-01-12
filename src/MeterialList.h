@@ -10,17 +10,17 @@
 class ReinforceStone : public Meterial
 {
 public :
-    ReinforceStone(std::string name, ItemType type, int price);
+    ReinforceStone();
 };
 
 class DragonScale : public Meterial
 {
 public : 
-    DragonScale(std::string name, ItemType type, int price);
+    DragonScale();
 };
 
 class SoulStone_Dragon : public Meterial
 {
 public :
-    SoulStone_Dragon(std::string name, ItemType type, int price);
+    SoulStone_Dragon();
 };

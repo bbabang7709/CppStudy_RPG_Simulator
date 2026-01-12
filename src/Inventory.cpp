@@ -180,7 +180,7 @@ void Inventory::list_inventory() const
     std::cout << "인벤토리" << std::endl;
     std::cout << "-----------------------------" << std::endl;
     for (const auto &slot : slots) {
-        std::cout << index++ << ". " << slot.item->get_name() << " x " << slot.count <<  " (가격 : " << slot.item->get_price() << " 골드)" << std::endl;
+        std::cout << index++ << ". " << slot.item->get_name() << " x " << slot.count <<  std::endl;
     }
     std::cout << "-----------------------------" << std::endl;
     std::cout<< "슬롯 수 : " << slots.size() << " / " << max_size << std::endl;

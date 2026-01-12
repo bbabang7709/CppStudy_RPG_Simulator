@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ShopItem.h"
+#include "ItemDatabase.h"
 #include <vector>
 
 class Shop
@@ -13,10 +14,10 @@ public :
     Shop();
 
     void list_items() const;
-    const ShopItem &get_item(int index) const;
+    const ItemData &get_item(int index) const;
     int slot_size;
 
 private :
-    std::vector<ShopItem> items;
-    ShopItem no_item;
+    std::vector<ItemData> items;
+    ItemData no_item;
 };

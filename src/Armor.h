@@ -11,7 +11,7 @@ class Player;
 class Armor : public Item
 {
 public :
-    Armor(const std::string name, ItemType type, int price);
+    Armor(const ItemData &data);
     virtual ~Armor();
     int get_armor_power() const;
     int get_armor_defend() const;

@@ -6,6 +6,7 @@
 
 enum class ItemType
 {
+    None,
     Weapon,
     Armor,
     Potion,

@@ -6,8 +6,8 @@
 
 #include <Algorithm>
 
-Armor::Armor(const std::string name, ItemType type, int price) : Item(name, type, price), armor_power(0), armor_defend(0), armor_hp(0),
-                                                                                          armor_mp(0), armor_vigor(0)
+Armor::Armor(const ItemData &data) : Item(data), armor_power(0), armor_defend(0), armor_hp(0),
+                               armor_mp(0), armor_vigor(0)
 {
     set_stackable(false);
 };

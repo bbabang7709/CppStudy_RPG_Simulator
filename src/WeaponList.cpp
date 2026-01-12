@@ -5,9 +5,8 @@
 #include "WeaponList.h"
 #include <iostream>
 
-NormalWeapon::NormalWeapon(const std::string name, ItemType type, int price) : Weapon(name, type, price)
+NormalWeapon::NormalWeapon() : Weapon(ItemDatabase::get(ItemID::NormalWeapon))
 {
-    set_id(ItemID::NormalWeapon);
     set_weapon_power(10);
     set_weapon_defend(0);
     set_cost(2);
@@ -26,9 +25,8 @@ void NormalWeapon::special_attack(Player &user, Character &target)
     std::cout << std::endl;
 }
 
-SlimeSword::SlimeSword(const std::string name, ItemType type, int price) : Weapon(name, type, price)
+SlimeSword::SlimeSword() : Weapon(ItemDatabase::get(ItemID::SlimeSword))
 {
-    set_id(ItemID::SlimeSword);
     set_weapon_power(30);
     set_weapon_defend(3);
     set_weapon_vigor(20);
@@ -48,9 +46,8 @@ void SlimeSword::special_attack(Player &user, Character &target)
     std::cout << std::endl;
 }
 
-PowerGauntlet::PowerGauntlet(const std::string name, ItemType type, int price) : Weapon(name, type, price)
+PowerGauntlet::PowerGauntlet() : Weapon(ItemDatabase::get(ItemID::PowerGauntlet))
 {
-    set_id(ItemID::PowerGauntlet);
     set_weapon_power(45);
     set_weapon_defend(8);
     set_weapon_hp(30);
@@ -70,9 +67,8 @@ void PowerGauntlet::special_attack(Player &user, Character &target)
     std::cout << std::endl;
 }
 
-DragonSpear::DragonSpear(const std::string name, ItemType type, int price) : Weapon(name, type, price)
+DragonSpear::DragonSpear() : Weapon(ItemDatabase::get(ItemID::DragonSpear))
 {
-    set_id(ItemID::DragonSpear);
     set_weapon_power(70);
     set_weapon_defend(10);
     set_weapon_hp(50);

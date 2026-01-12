@@ -4,12 +4,10 @@
  ******************************************/
 #pragma once
 
-#include "ItemID.h"
+#include "ItemDatabase.h"
 #include <string>
 
 struct ShopItem
 {
-    ItemID id;
-    std::string name;
-    int price;
+    ItemData &i_data;
 };

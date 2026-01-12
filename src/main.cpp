@@ -12,6 +12,7 @@
 #include "BossMonsterList.h"
 #include "MonsterAI.h"
 #include "Inventory.h"
+#include "ItemDatabase.h"
 #include "WeaponList.h"
 #include "ArmorList.h"
 #include "MeterialList.h"

@@ -10,5 +10,5 @@
 class Meterial : public Item
 {
 public :
-    Meterial(const std::string name, ItemType type, int price);
+    Meterial(const ItemData &data);
 };

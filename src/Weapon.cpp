@@ -6,8 +6,8 @@
 
 #include <Algorithm>
 
-Weapon::Weapon(const std::string name, ItemType type, int price) : Item(name, type, price), weapon_power(0), weapon_defend(0), weapon_hp(0),
-                                                                                            weapon_mp(0), weapon_vigor(0), cost(0) 
+Weapon::Weapon(const ItemData &data) : Item(data), weapon_power(0), weapon_defend(0), weapon_hp(0),
+                                 weapon_mp(0), weapon_vigor(0), cost(0) 
 {
     set_stackable(false);
 }

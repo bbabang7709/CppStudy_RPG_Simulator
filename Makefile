@@ -5,6 +5,7 @@ SRC = src/main.cpp \
       src/Character.cpp \
       src/Item.cpp \
       src/ItemFactory.cpp \
+      src/ItemDatabase.cpp \
       src/Player.cpp \
       src/Weapon.cpp \
       src/Armor.cpp \

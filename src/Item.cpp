@@ -5,7 +5,7 @@
 #include "Item.h"
 #include "ItemFactory.h"
 
-Item::Item(std::string name, ItemType type, int price) : name(name), type(type), price(price) {}
+Item::Item(const ItemData &data) : id(data.id), name(data.name), type(data.type), price(data.price) {}
 Item::~Item() = default;
 
 ItemID Item::get_id() const { return id; }

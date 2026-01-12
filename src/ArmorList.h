@@ -10,17 +10,17 @@
 class NormalArmor : public Armor
 {
 public :
-    NormalArmor(const std::string name, ItemType type, int price);
+    NormalArmor();
 };
 
 class GoblinArmor : public Armor
 {
 public :    
-    GoblinArmor(const std::string name, ItemType type, int price);
+    GoblinArmor();
 };
 
 class DragonArmor : public Armor
 {
 public :    
-   DragonArmor(const std::string name, ItemType type, int price);
+   DragonArmor();
 };
