@@ -29,7 +29,7 @@ void Shop::list_items() const
     std::cout << "-----------[ 상점 ]-----------" << std::endl;
     int index = 1;
     for (auto &item : items) {
-        std::cout << index++ << ". " << item.name << ": " << item.price << "골드" << std::endl;
+        std::cout << index++ << ". " << item.name << ": " << item.price << " 골드" << std::endl;
     }
     std::cout << "------------------------------" << std::endl;
 }

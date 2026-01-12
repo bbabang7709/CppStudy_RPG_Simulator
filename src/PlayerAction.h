@@ -18,6 +18,7 @@ enum class MenuSelection
     PlayerInfo,
     Inventory,
     Shop,
+    Forge,
     Save,
     Load,
     Exit

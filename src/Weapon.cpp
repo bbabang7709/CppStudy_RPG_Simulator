@@ -6,7 +6,7 @@
 
 #include <Algorithm>
 
-Weapon::Weapon(const ItemData &data) : Item(data), weapon_power(0), weapon_defend(0), weapon_hp(0),
+Weapon::Weapon(const ItemData &data) : Equipment(data), weapon_power(0), weapon_defend(0), weapon_hp(0),
                                  weapon_mp(0), weapon_vigor(0), cost(0) 
 {
     set_stackable(false);
@@ -14,7 +14,7 @@ Weapon::Weapon(const ItemData &data) : Item(data), weapon_power(0), weapon_defen
 
 Weapon::~Weapon() = default;
 
-int Weapon::get_weapon_power() const { return weapon_power; }
+int Weapon::get_weapon_power() const { return (weapon_power); }
 int Weapon::get_weapon_defend() const { return weapon_defend; }
 int Weapon::get_weapon_hp() const { return weapon_hp; }
 int Weapon::get_weapon_mp() const { return weapon_mp; }

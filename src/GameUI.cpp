@@ -23,9 +23,10 @@ void GameUI::print_mainMenu()
     std::cout << "2. 플레이어 정보" << std::endl;
     std::cout << "3. 인벤토리 확인" << std::endl;
     std::cout << "4. 상점" << std::endl;
-    std::cout << "5. 저장하기" << std::endl;
-    std::cout << "6. 불러오기" << std::endl;
-    std::cout << "7. 종료" << std::endl;
+    std::cout << "5. 대장간" << std::endl;
+    std::cout << "6. 저장하기" << std::endl;
+    std::cout << "7. 불러오기" << std::endl;
+    std::cout << "8. 종료" << std::endl;
     std::cout << "==============================" << std::endl;
     std::cout << "입력 >>> ";
 }
@@ -50,9 +51,10 @@ void GameUI::print_menu()
 void GameUI::print_shop_menu()
 {
     clear_screen();
-    std::cout << "상점에 오신 것을 환영합니다!!" << std::endl;
+    std::cout << "상점에 오신 것을 환영합니다!!";
     delay(1000);
-    std::cout << "무엇을 도와드릴까요???" << std::endl;
+
+    std::cout << std::endl << std::endl << "무엇을 도와드릴까요???" << std::endl;
     std::cout << "(0 : 돌아가기 1 : 아이템 구매 2 : 아이템 판매)" << std::endl;
     std::cout << "입력 >>> ";
 }
@@ -74,9 +76,9 @@ void GameUI::print_shop_sell_menu()
     std::cout << "어떤 아이템을 판매하시겠습니까?? (0 : 돌아가기)" << std::endl;
     std::cout << "입력 >>> ";
 }
-void GameUI::print_ask_count_menu()
+void GameUI::print_ask_sell_count()
 {
-    std::cout << "몇 개를 판매하시겠습니까??" << std::endl;
+    std::cout << "몇 개를 판매하시겠습니까?? (0 : 돌아가기)" << std::endl;
     std::cout << "입력 >>> ";
 }
 void GameUI::print_shop_sell_result(bool TF)
@@ -87,6 +89,17 @@ void GameUI::print_shop_sell_result(bool TF)
         std::cout << "판매에 실패했습니다..." << std::endl;
     delay(1000);
 }
+void GameUI::print_forge_menu()
+{
+    std::cout << "이곳은 대장간입니다. 무엇을 하시겠습니까?" << std::endl;
+    std::cout << "(0 : 돌아가기 1 : 장비 강화)" << std::endl;
+    std::cout << "입력 >>> ";
+}
+void GameUI::print_enhance_selection()
+{
+    std::cout << "강화할 장비를 선택하세요. (0 : 돌아가기)" << std::endl;
+    std::cout << "입력 >>> ";
+}
 void GameUI::print_playerInfo(const Player &player)
 {
     clear_screen();
@@ -96,8 +109,16 @@ void GameUI::print_playerInfo(const Player &player)
     std::cout << "공격력 : " << player.get_power() << std::endl;
     std::cout << "방어력 : " << player.get_defend() << std::endl;
     std::cout << "활력 : " << player.get_vigor() << std::endl << std::endl;
-    std::cout << "무기 : " << player.get_weapon_name() << std::endl;
-    std::cout << "방어구 : " << player.get_armor_name() << std::endl;
+    std::cout << "무기 : " << player.get_weapon_name();
+    if (player.get_my_weapon()) {
+        std::cout << " + " << player.get_my_weapon()->get_enhance_level();
+    }
+    std::cout << std::endl;
+    std::cout << "방어구 : " << player.get_armor_name();
+    if (player.get_my_armor()) {
+        std::cout << " + " << player.get_my_armor()->get_enhance_level();
+    }
+    std::cout << std::endl;
     std::cout << "==============================" << std::endl;
     std::cout << "계속하려면 Enter...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -134,10 +155,6 @@ void GameUI::print_inventory_selection_menu()
 {
     std::cout << "무엇을 하시겠습니까? (0: 돌아가기 1. 아이템 장착 2. 인벤토리 확장) >>> ";
 }
-/*void GameUI::print_equip_menu(Player &player)
-{
-
-}*/
 void GameUI::print_equip_selection_menu()
 {
     std::cout << "장착할 아이템의 번호를 입력하세요. (0 : 돌아가기) >>> ";

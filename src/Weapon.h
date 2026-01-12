@@ -3,14 +3,14 @@
  *  무기들의 공통 스탯 & 특수 기술 관리
  ******************************************/
 #pragma once
-#include "Item.h"
+#include "Equipment.h"
 #include "ItemDatabase.h"
 #include "Sys.h"
 
 class Character;
 class Player;
 
-class Weapon : public Item
+class Weapon : public Equipment
 {
 public :
     Weapon(const ItemData &data);

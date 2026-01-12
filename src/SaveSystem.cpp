@@ -4,6 +4,7 @@
  ******************************************/
 #include "SaveSystem.h"
 #include "ItemFactory.h"
+#include "Item.h"
 #include <fstream>
 #include <string>
 
@@ -23,14 +24,22 @@ void SaveManager::Save(Player &player)
     file << "INVENTORY_EXPAND_LEVEL " << player.get_inventory().get_expansion_count() << "\n";
     file << "INVENTORY_MAX_SLOTS " << player.get_inventory().get_max_size() << "\n";
     for (const auto &slot : slots) {
+        if (!slot.item) continue;
         file << "ITEM " << static_cast<int>(slot.item->get_id()) << "\n";
+        if (slot.item->is_enhanceable()) {
+            file << "ENHANCE " << slot.item->get_enhance_level() << "\n";
+        }
         file << "COUNT " << slot.count << "\n";
     } 
 
     file << "WEAPON "
          << (player.get_my_weapon() ? static_cast<int>(player.get_my_weapon()->get_id()) : -1) << "\n";
+    if (player.get_my_weapon())
+        file << "WEAPON_ENHANCE " << player.get_my_weapon()->get_enhance_level() << "\n";
     file << "ARMOR "
          << (player.get_my_armor() ? static_cast<int>(player.get_my_armor()->get_id()) : -1) << "\n";
+    if (player.get_my_armor())
+        file << "ARMOR_ENHANCE " << player.get_my_armor()->get_enhance_level() << "\n";
 }
 
 void LoadManager::Load(Player &player, std::string file_name)
@@ -44,7 +53,9 @@ void LoadManager::Load(Player &player, std::string file_name)
     int value;
 
     int weapon_id = -1;
+    int weapon_enhance = 0;
     int armor_id = -1;
+    int armor_enhance = 0;
 
     while (file >> key >> value) 
     {
@@ -58,20 +69,34 @@ void LoadManager::Load(Player &player, std::string file_name)
         else if (key == "INVENTORY_MAX_SLOTS") player.get_inventory().set_max_size(value);
         else if (key == "ITEM") {
             auto item = item_factory.create(static_cast<ItemID>(value));
+            if (!item) 
+                continue;
             file >> key >> value;
+            if (key == "ENHANCE") {
+                item->set_enhance_level(value);
+                file >> key >> value;
+            }
             if (key == "COUNT") {
                 player.get_inventory().add_item(std::move(item), value);
             }
         } 
         else if (key == "WEAPON") weapon_id = value;
+        else if (key == "WEAPON_ENHANCE") weapon_enhance = value;
         else if (key == "ARMOR") armor_id = value;
+        else if (key == "ARMOR_ENHANCE") armor_enhance = value;
     }
     if (weapon_id != -1) {
-        if (player.get_my_weapon() == nullptr)
-            player.equip_item(item_factory.create(static_cast<ItemID>(weapon_id)));
+        if (player.get_my_weapon() == nullptr) {
+            auto item = item_factory.create(static_cast<ItemID>(weapon_id));
+            item->set_enhance_level(weapon_enhance);
+            player.equip_item(std::move(item));
+        }
     }
     if (armor_id != -1) {
-        if (player.get_my_armor() == nullptr)
-            player.equip_item(item_factory.create(static_cast<ItemID>(armor_id)));
+        if (player.get_my_armor() == nullptr) {
+            auto item = item_factory.create(static_cast<ItemID>(armor_id));
+            item->set_enhance_level(armor_enhance);
+            player.equip_item(std::move(item));
+        }
     }
 }

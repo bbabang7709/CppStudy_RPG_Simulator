@@ -3,12 +3,12 @@
  *  방어구들의 공통 스탯 & 특수 기술 관리
  ******************************************/
 #pragma once
-#include "Item.h"
+#include "Equipment.h"
 
 class Character;
 class Player;
 
-class Armor : public Item
+class Armor : public Equipment
 {
 public :
     Armor(const ItemData &data);

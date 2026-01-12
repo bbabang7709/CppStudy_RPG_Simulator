@@ -7,6 +7,7 @@ SRC = src/main.cpp \
       src/ItemFactory.cpp \
       src/ItemDatabase.cpp \
       src/Player.cpp \
+      src/Equipment.cpp \
       src/Weapon.cpp \
       src/Armor.cpp \
       src/Meterial.cpp \
@@ -25,7 +26,8 @@ SRC = src/main.cpp \
       src/Inventory.cpp \
       src/GameProcess.cpp \
       src/SaveSystem.cpp \
-      src/Shop.cpp
+      src/Shop.cpp \
+      src/EnhanceSystem.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

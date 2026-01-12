@@ -10,8 +10,6 @@
 #include "Inventory.h"
 #include "InventoryExpand.h"
 #include "Shop.h"
-
-
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -79,6 +77,7 @@ void GameProcess::shop_process(Player &player)
             while (true) {
                 clear_screen();
                 shop.list_items();
+                player.get_inventory().list_inventory();
                 UI.print_shop_buy_menu();
                 index = safe_int_input();
                 if (index == 0)
@@ -102,16 +101,72 @@ void GameProcess::shop_process(Player &player)
                     UI.print_error_screen();
                     continue;
                 }
-                is_success = player.sell_item(index, 1);
+                UI.print_ask_sell_count();
+                int sell_count = safe_int_input();
+                if (sell_count == 0)
+                    continue;
+                is_success = player.sell_item(index, sell_count);
                 UI.print_shop_sell_result(is_success);
             }
         } else {
             UI.print_error_screen();
         }
     }
-
 }
-
+void GameProcess::forge_process(Player &player)
+{
+    int c = 0, index = 0;
+    while (true)
+    {
+        clear_screen();
+        UI.print_forge_menu();
+        c = safe_int_input();
+        if (c == 0)
+            break;
+        else if (c == 1) {
+            while (true)
+            {
+                clear_screen();
+                player.get_inventory().list_inventory();
+                UI.print_enhance_selection();
+                index = safe_int_input();
+                if (index == 0) 
+                    break;
+                EnhanceResult result = player.enhance_item(index);
+                switch (result) 
+                {
+                case EnhanceResult::Success :
+                    std::cout << "성공!!" << std::endl;
+                    delay(1000);
+                    break;
+                case EnhanceResult::Failed :
+                    std::cout << "실패..." << std::endl;
+                    delay(1000);
+                    break;
+                case EnhanceResult::MaxLevel :
+                    std::cout << "이미 최대로 강화했습니다." << std::endl;
+                    delay(1000);
+                    break;
+                case EnhanceResult::noMeterial :
+                    std::cout << "필요한 재료가 부족합니다." << std::endl;
+                    delay(1000);
+                    break;
+                case EnhanceResult::Destroyed :
+                    delay(1000);
+                    break;
+                case EnhanceResult::Error :
+                    std::cout << "오류가 발생했습니다." << std::endl;
+                    delay(1000);
+                    break;
+                default :
+                    std::cout << "오류가 발생했습니다." << std::endl;
+                    delay(1000);
+                    break;
+                }
+            }
+        }
+    }
+}
 void GameProcess::NormalMonsterBattle(Player &player, PlayerController &p_controller)
 {
     clear_screen();
@@ -184,7 +239,6 @@ void GameProcess::BossMonsterBattle(Player &player, PlayerController &p_controll
 void GameProcess::run(Player &player, PlayerController &p_controller)
 {
     int reply; 
-    InventoryMenu e_select;
     
     while (true)
     {
@@ -232,7 +286,7 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
                 clear_screen();
                 player.get_inventory().list_inventory();
                 UI.print_inventory_selection_menu();
-                e_select = static_cast<InventoryMenu>(safe_int_input());
+                InventoryMenu e_select = static_cast<InventoryMenu>(safe_int_input());
                 switch (e_select) {
                 case InventoryMenu::Equip :
                     equip_process(player);
@@ -249,6 +303,9 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
         }
         case MenuSelection::Shop :
             shop_process(player);
+            break;
+        case MenuSelection::Forge :
+            forge_process(player);
             break;
         case MenuSelection::Save :
         {

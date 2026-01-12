@@ -3,6 +3,7 @@
  *  모험을 진행하는 플레이어 클래스
  ******************************************/
 #include "Player.h"
+#include "Random.h"
 #include "InventoryExpand.h"
 #include <algorithm>
 #include <iostream>
@@ -104,7 +105,7 @@ bool Player::equip_item(std::unique_ptr<Item> item)
                 get_inventory().add_item(unequip_Weapon());
             set_max_hp(max_hp + weapon->get_weapon_hp());
             set_max_mp(max_mp + weapon->get_weapon_mp());
-            set_power(power + weapon->get_weapon_power());
+            set_power(power + weapon->get_weapon_power() + weapon->get_enhance_level() * 5);
             set_defend(defend + weapon->get_weapon_defend());
             set_vigor(vigor + weapon->get_weapon_vigor());
             my_weapon = std::move(weapon);
@@ -120,7 +121,7 @@ bool Player::equip_item(std::unique_ptr<Item> item)
             set_max_hp(max_hp + armor->get_armor_hp());
             set_max_mp(max_mp + armor->get_armor_mp());
             set_power(power + armor->get_armor_power());
-            set_defend(defend + armor->get_armor_defend());
+            set_defend(defend + armor->get_armor_defend() + armor->get_enhance_level() * 3);
             set_vigor(vigor + armor->get_armor_vigor());
             my_armor = std::move(armor);
             break;
@@ -155,8 +156,12 @@ std::unique_ptr<Weapon> Player::unequip_Weapon()
         std::cout << "장착된 무기가 없습니다." << std::endl;
         return nullptr;
     } else {
-        int total_power = power - my_weapon->get_weapon_power();
-        set_power(total_power);
+        set_max_hp(max_hp - my_weapon->get_weapon_hp());
+        set_max_mp(max_mp - my_weapon->get_weapon_mp());
+        set_power(power - my_weapon->get_weapon_power() - my_weapon->get_enhance_level() * 5);
+        set_defend(defend - my_weapon->get_weapon_defend());
+        set_vigor(vigor - my_weapon->get_weapon_vigor());
+
         return std::move(my_weapon);
     }
 }
@@ -167,10 +172,62 @@ std::unique_ptr<Armor> Player::unequip_Armor()
         std::cout << "장착된 방어구가 없습니다." << std::endl;
         return nullptr;
     } else {
-        int total_defend = defend - my_armor->get_armor_defend();
-        set_defend(total_defend);
+        set_max_hp(max_hp - my_armor->get_armor_hp());
+        set_max_mp(max_mp - my_armor->get_armor_mp());
+        set_power(power - my_armor->get_armor_power());
+        set_defend(defend - my_armor->get_armor_defend() - my_armor->get_enhance_level() * 3);
+        set_vigor(vigor - my_armor->get_armor_vigor());
         return std::move(my_armor);
     }
+}
+
+EnhanceResult Player::enhance_item(int inventory_index)
+{
+    int index = inventory_index - 1;
+    int meterial_index = -1;
+    int roll;
+
+    auto &slots = inventory.get_slots();
+    if (index < 0 || index > (int)slots.size())
+        return EnhanceResult::Error;
+
+    auto &slot = slots[index];
+    
+    auto target_item = dynamic_cast<Equipment *>(slot.item.get());
+    if (!target_item)
+        return EnhanceResult::Error;
+    if (!target_item->can_enhance())
+        return EnhanceResult::MaxLevel;
+
+    for (int i = 0; i < (int)slots.size(); i++) {
+        if (slots[i].item && slots[i].item->get_id() == ItemID::ReinforceStone) {
+            meterial_index = i;
+            break;
+        }
+    }
+    if (meterial_index == -1) 
+        return EnhanceResult::noMeterial;
+
+    auto &meterial_slot = slots[meterial_index];
+
+    auto rule = EnhanceSystem::get_rule(target_item->get_enhance_level());
+    
+    if (inventory.show_gold() < rule.gold_cost || meterial_slot.count < rule.meterial_cost)
+        return EnhanceResult::noMeterial;
+    
+    inventory.spend_gold(rule.gold_cost);
+    meterial_slot.count -= rule.meterial_cost;
+
+    if (meterial_slot.count == 0)
+        inventory.get_slots().erase(inventory.get_slots().begin() + meterial_index);
+    
+    roll = Random::range(1, 100);
+    if (roll > rule.success_rate) 
+        return EnhanceResult::Failed;
+    
+    slot.item->set_enhance_level(slot.item->get_enhance_level() + 1);
+
+    return EnhanceResult::Success;
 }
 
 bool Player::expand_inventory()
@@ -194,7 +251,7 @@ bool Player::expand_inventory()
 
 Inventory &Player::get_inventory() { return inventory; }
 
-bool Player::buy_item(const ShopItem &item)
+bool Player::buy_item(const ItemData &item)
 {
     int cur_gold = get_inventory().show_gold();
     if (cur_gold < item.price)
@@ -205,7 +262,7 @@ bool Player::buy_item(const ShopItem &item)
     return true;
 }
 
-bool Player::buy_item(const ShopItem &item, int count)
+bool Player::buy_item(const ItemData &item, int count)
 {
     int cur_gold = get_inventory().show_gold();
     int spend_gold = item.price * count;

@@ -7,7 +7,7 @@
 #include "Weapon.h"
 #include "Armor.h"
 #include "Inventory.h"
-#include "ShopItem.h"
+#include "EnhanceSystem.h"
 
 class Player : public Character
 {
@@ -40,12 +40,14 @@ public :
     std::unique_ptr<Weapon> unequip_Weapon();
     std::unique_ptr<Armor> unequip_Armor();
 
+    EnhanceResult enhance_item(int inventory_index);
+
     int calc_expand_cost();
     bool expand_inventory();
     Inventory &get_inventory();
 
-    bool buy_item(const ShopItem &item); // 1개만 구입
-    bool buy_item(const ShopItem &item, int count); // (count)개 구입
+    bool buy_item(const ItemData &item); // 1개만 구입
+    bool buy_item(const ItemData &item, int count); // (count)개 구입
     bool sell_item(int inventory_index, int count); // (count)개 판매
 
 protected :

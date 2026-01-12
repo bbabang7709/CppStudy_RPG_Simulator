@@ -24,6 +24,10 @@ public :
     bool is_stackable() const;
     void set_stackable(bool _is);
 
+    virtual bool is_enhanceable() const { return false; };
+    virtual int get_enhance_level() const { return 0; };
+    virtual void set_enhance_level(int) {};
+
     //virtual void use() = 0;
 
 protected :

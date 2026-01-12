@@ -4,8 +4,8 @@
  ******************************************/
 #pragma once
 
-#include "ShopItem.h"
 #include "ItemDatabase.h"
+#include "Equipment.h"
 #include <vector>
 
 class Shop

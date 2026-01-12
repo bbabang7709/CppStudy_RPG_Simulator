@@ -21,8 +21,10 @@ public :
     void print_shop_buy_menu();
     void print_shop_buy_result(bool TF);
     void print_shop_sell_menu();
-    void print_ask_count_menu();
+    void print_ask_sell_count();
     void print_shop_sell_result(bool TF);
+    void print_forge_menu();
+    void print_enhance_selection();
     void print_playerInfo(const Player &player);
     void print_monster_type_selection_menu();
     void print_normal_monster_selection_menu();
