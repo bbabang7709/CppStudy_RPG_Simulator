@@ -13,6 +13,8 @@ void SaveManager::Save(Player &player)
 {
     std::ofstream file("save.txt");
 
+    file << "LEVEL " << player.get_level() << "\n";
+    file << "EXP " << player.get_exp() << "\n";
     file << "HP " << player.get_base_hp() << "\n";
     file << "MP " << player.get_base_mp() << "\n"; 
     file << "POWER " << player.get_base_power() << "\n";
@@ -59,7 +61,9 @@ void LoadManager::Load(Player &player, std::string file_name)
 
     while (file >> key >> value) 
     {
-        if (key == "HP") player.set_max_hp(value);
+        if (key == "LEVEL") player.set_level(value);
+        else if (key == "EXP") player.gain_exp(value);
+        else if (key == "HP") player.set_max_hp(value);
         else if (key == "MP") player.set_max_mp(value);
         else if (key == "POWER") player.set_power(value);
         else if (key == "DEFEND") player.set_defend(value);

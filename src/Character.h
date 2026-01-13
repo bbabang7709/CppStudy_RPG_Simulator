@@ -4,6 +4,8 @@
  ******************************************/
 #pragma once
 
+#include "StatBlock.h"
+
 class Character
 {
 public :
@@ -17,6 +19,8 @@ public :
     int get_power() const;
     int get_defend() const;
     int get_vigor() const;
+    int get_cri() const;
+    int get_speed() const;
     
     void set_hp(int _hp);
     void set_max_hp(int _max_hp);
@@ -25,17 +29,22 @@ public :
     void set_power(int _power);
     void set_defend(int _defend);
     void set_vigor(int _vigor);
-    
+    void set_cri(int _cri);
+    void set_speed(int _speed);
 
-    virtual void reset_status();
+    StatBlock get_base_stats() const;
+    StatBlock get_final_stats() const;
+    int get_cur_hp() const;
+    int get_cur_mp() const;
+
+    virtual void reset_condition();
     int take_damage(int damage);
 
 protected :
-    int hp;
-    int max_hp;
-    int mp;
-    int max_mp;
-    int power;
-    int defend;
-    int vigor;
+    StatBlock base_stats;
+    StatBlock final_stats;
+    int cur_hp;
+    int cur_mp;
+
+    virtual void recalc_final_stats();
 };

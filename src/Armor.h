@@ -24,7 +24,8 @@ public :
     void set_armor_hp(int _hp);
     void set_armor_mp(int _mp);
     void set_armor_vigor(int _vigor);
-    //void use() override;
+
+    const StatBlock get_total_bonus() const override;
 
 protected :
     int armor_power;

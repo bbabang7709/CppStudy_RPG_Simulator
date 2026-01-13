@@ -3,72 +3,164 @@
  *  모험을 진행하는 플레이어 클래스
  ******************************************/
 #include "Player.h"
+#include "ExpTable.h"
 #include "Random.h"
 #include "InventoryExpand.h"
+#include "GameUI.h"
 #include <algorithm>
 #include <iostream>
 
 Player::Player()
 {
-    set_base_hp(100);
-    set_base_mp(5);
-    set_base_power(10);
-    set_base_defend(5);
-    set_base_vigor(30);
+    base_stats.hp = 100;
+    base_stats.mp = 5;
+    base_stats.power = 10;
+    base_stats.defend = 5;
+    base_stats.vigor = 30;
+    base_stats.cri = 0;
+    base_stats.speed = 0;
 
-    set_max_hp(base_hp);
-    set_max_mp(base_mp);
-    set_power(base_power);
-    set_defend(base_defend);
-    set_vigor(base_vigor);
-
-    reset_status();
+    recalc_final_stats();
+    reset_condition();
 }
 Player::~Player() = default;
 
-int Player::get_base_hp() const { return base_hp; }
-int Player::get_base_mp() const { return base_mp; }
-int Player::get_base_power() const { return base_power; }
-int Player::get_base_defend() const { return base_defend; }
-int Player::get_base_vigor() const { return base_vigor; }
+int Player::get_base_hp() const { return base_stats.hp; }
+int Player::get_base_mp() const { return base_stats.mp; }
+int Player::get_base_power() const { return base_stats.power; }
+int Player::get_base_defend() const { return base_stats.defend; }
+int Player::get_base_vigor() const { return base_stats.vigor; }
 
 void Player::set_base_hp(int _hp)
 {
-    base_hp = _hp;
+    base_stats.hp = _hp;
 }
 void Player::set_base_mp(int _mp)
 {
-    base_mp = _mp;
+    base_stats.mp = _mp;
 }
 void Player::set_base_power(int _power)
 {
-    base_power = _power;
+    base_stats.power = _power;
 }
 void Player::set_base_defend(int _defend)
 {
-    base_defend = _defend;
+    base_stats.defend = _defend;
 }
 void Player::set_base_vigor(int _vigor)
 {
-    base_vigor = _vigor;
+    base_stats.vigor = _vigor;
+}
+
+StatBlock Player::get_base_stats() const { return base_stats; }
+StatBlock Player::get_final_stats() const { return final_stats; }
+
+//================= EXP =================//
+
+int Player::get_level() const { return level; }
+
+int Player::get_exp() const { return exp; }
+
+void Player::gain_exp(int _exp)
+{
+    exp += _exp;
+
+    while (exp >= ExpTable::get_required_exp(level))
+    {
+        exp -= ExpTable::get_required_exp(level);
+        level_up();
+    }
+}
+
+void Player::set_level(int _level)
+{
+    level = _level;
+}
+
+void Player::level_up()
+{
+    level++;
+    stat_point += 5;
+
+    std::cout << "레벨 업!! LV. " << level << std::endl;
+}
+
+//============== Stat Point ==============//
+
+int Player::get_stat_point() const { return stat_point; }
+
+bool Player::invest_stat_point(StatType type, int amount)
+{
+    switch (type)
+    {
+    case StatType::HP :
+        base_stats.hp += amount * 10;
+        break;
+    case StatType::MP :
+        base_stats.mp += amount * 2;
+        break;
+    case StatType::POWER :
+        base_stats.power += amount * 2;
+        break;
+    case StatType::DEFEND :
+        base_stats.defend += amount * 2;
+        break;
+    case StatType::VIGOR :
+        base_stats.vigor += amount * 3;
+        break;
+    default :
+        return false;
+    }
+
+    stat_point -= amount;
+    recalc_final_stats();
+
+    return true;
+}
+
+void Player::recalc_final_stats()
+{
+    final_stats = base_stats;
+
+    if (my_weapon) {
+        final_stats += my_weapon->get_total_bonus();
+    }
+    if (my_armor) {
+        final_stats += my_armor->get_total_bonus();
+    }
+}
+
+void Player::reset_stat_point()
+{
+    base_stats.hp = 100;
+    base_stats.mp = 5;
+    base_stats.power = 10;
+    base_stats.defend = 5;
+    base_stats.vigor = 30;
+    base_stats.cri = 0;
+    base_stats.speed = 0;
+
+    stat_point += (level - 1) * 5;
+
+    recalc_final_stats();
 }
 
 void Player::attack(Character &target)
 {
-    target.take_damage(power);
+    target.take_damage(final_stats.power);
 }
 
 void Player::reset_player()
 {
-    set_hp(base_hp);
-    set_mp(0);
-    set_defend(base_defend);
-    set_power(base_power);
-    set_vigor(base_vigor);
     if (get_my_weapon())
         unequip_Weapon();
     if (get_my_armor())
         unequip_Armor();
+
+    level = 1;
+    exp = 0;
+    recalc_final_stats();
+    reset_condition();
 }
 
 Weapon *Player::get_my_weapon() const
@@ -103,12 +195,13 @@ bool Player::equip_item(std::unique_ptr<Item> item)
                 return false;
             if (my_weapon)
                 get_inventory().add_item(unequip_Weapon());
-            set_max_hp(max_hp + weapon->get_weapon_hp());
-            set_max_mp(max_mp + weapon->get_weapon_mp());
-            set_power(power + weapon->get_weapon_power() + weapon->get_enhance_level() * 5);
-            set_defend(defend + weapon->get_weapon_defend());
-            set_vigor(vigor + weapon->get_weapon_vigor());
+            // set_max_hp(max_hp + weapon->get_weapon_hp());
+            // set_max_mp(max_mp + weapon->get_weapon_mp());
+            // set_power(power + weapon->get_weapon_power() + weapon->get_enhance_level() * 5);
+            // set_defend(defend + weapon->get_weapon_defend());
+            // set_vigor(vigor + weapon->get_weapon_vigor());
             my_weapon = std::move(weapon);
+            recalc_final_stats();
             break;
         }
         case ItemType::Armor :
@@ -118,12 +211,13 @@ bool Player::equip_item(std::unique_ptr<Item> item)
                 return false;
             if (my_armor)
                 get_inventory().add_item(unequip_Armor());
-            set_max_hp(max_hp + armor->get_armor_hp());
-            set_max_mp(max_mp + armor->get_armor_mp());
-            set_power(power + armor->get_armor_power());
-            set_defend(defend + armor->get_armor_defend() + armor->get_enhance_level() * 3);
-            set_vigor(vigor + armor->get_armor_vigor());
+            // set_max_hp(max_hp + armor->get_armor_hp());
+            // set_max_mp(max_mp + armor->get_armor_mp());
+            // set_power(power + armor->get_armor_power());
+            // set_defend(defend + armor->get_armor_defend() + armor->get_enhance_level() * 3);
+            // set_vigor(vigor + armor->get_armor_vigor());
             my_armor = std::move(armor);
+            recalc_final_stats();
             break;
         }
         case ItemType::Meterial :
@@ -156,13 +250,15 @@ std::unique_ptr<Weapon> Player::unequip_Weapon()
         std::cout << "장착된 무기가 없습니다." << std::endl;
         return nullptr;
     } else {
-        set_max_hp(max_hp - my_weapon->get_weapon_hp());
-        set_max_mp(max_mp - my_weapon->get_weapon_mp());
-        set_power(power - my_weapon->get_weapon_power() - my_weapon->get_enhance_level() * 5);
-        set_defend(defend - my_weapon->get_weapon_defend());
-        set_vigor(vigor - my_weapon->get_weapon_vigor());
+        // set_max_hp(max_hp - my_weapon->get_weapon_hp());
+        // set_max_mp(max_mp - my_weapon->get_weapon_mp());
+        // set_power(power - my_weapon->get_weapon_power() - my_weapon->get_enhance_level() * 5);
+        // set_defend(defend - my_weapon->get_weapon_defend());
+        // set_vigor(vigor - my_weapon->get_weapon_vigor());
+        auto unequiped_weapon = std::move(my_weapon);
+        recalc_final_stats();
 
-        return std::move(my_weapon);
+        return unequiped_weapon; 
     }
 }
 
@@ -172,13 +268,30 @@ std::unique_ptr<Armor> Player::unequip_Armor()
         std::cout << "장착된 방어구가 없습니다." << std::endl;
         return nullptr;
     } else {
-        set_max_hp(max_hp - my_armor->get_armor_hp());
-        set_max_mp(max_mp - my_armor->get_armor_mp());
-        set_power(power - my_armor->get_armor_power());
-        set_defend(defend - my_armor->get_armor_defend() - my_armor->get_enhance_level() * 3);
-        set_vigor(vigor - my_armor->get_armor_vigor());
-        return std::move(my_armor);
+        // set_max_hp(max_hp - my_armor->get_armor_hp());
+        // set_max_mp(max_mp - my_armor->get_armor_mp());
+        // set_power(power - my_armor->get_armor_power());
+        // set_defend(defend - my_armor->get_armor_defend() - my_armor->get_enhance_level() * 3);
+        // set_vigor(vigor - my_armor->get_armor_vigor());
+        auto unequiped_armor = std::move(my_armor);
+        recalc_final_stats();
+
+        return unequiped_armor;
     }
+}
+bool Player::try_unequip(int index)
+{
+    if (index == 1) {
+        if (!inventory.add_item(unequip_Weapon()))
+            return false;
+    } else if (index == 2) {
+        if (!inventory.add_item(unequip_Armor()))
+            return false;
+    } else {
+        return false;
+    }
+
+    return true;
 }
 
 EnhanceResult Player::enhance_item(int inventory_index)
@@ -186,13 +299,14 @@ EnhanceResult Player::enhance_item(int inventory_index)
     int index = inventory_index - 1;
     int meterial_index = -1;
     int roll;
+    bool is_success = false;
 
     auto &slots = inventory.get_slots();
-    if (index < 0 || index > (int)slots.size())
+    if (index < 0 || index >= static_cast<int>(slots.size()))
         return EnhanceResult::Error;
 
     auto &slot = slots[index];
-    
+
     if (!slot.item->is_enhanceable())
         return EnhanceResult::Disable;
     auto target_item = dynamic_cast<Equipment *>(slot.item.get());
@@ -217,19 +331,23 @@ EnhanceResult Player::enhance_item(int inventory_index)
     if (inventory.show_gold() < rule.gold_cost || meterial_slot.count < rule.meterial_cost)
         return EnhanceResult::noMeterial;
     
+    roll = Random::range(1, 100);
+    if (roll > rule.success_rate) 
+        is_success = false;
+    
+    slot.item->set_enhance_level(slot.item->get_enhance_level() + 1);
+    is_success = true;
+
     inventory.spend_gold(rule.gold_cost);
     meterial_slot.count -= rule.meterial_cost;
 
     if (meterial_slot.count == 0)
         inventory.get_slots().erase(inventory.get_slots().begin() + meterial_index);
-    
-    roll = Random::range(1, 100);
-    if (roll > rule.success_rate) 
-        return EnhanceResult::Failed;
-    
-    slot.item->set_enhance_level(slot.item->get_enhance_level() + 1);
 
-    return EnhanceResult::Success;
+    if (is_success)
+        return EnhanceResult::Success;
+    else
+        return EnhanceResult::Failed;
 }
 
 bool Player::expand_inventory()

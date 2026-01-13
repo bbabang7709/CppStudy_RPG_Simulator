@@ -15,11 +15,13 @@
 class Monster : public Character
 {
 public :
-    Monster(std::string name, int drop_gold);
+    Monster(std::string name, int drop_gold, int exp);
     virtual ~Monster();
 
     std::string get_name() const;
     int get_drop_gold() const;
+    int get_exp() const;
+    
     void attack(Character &target);
     virtual void strong_attack(Character &target);
     void defend();
@@ -31,4 +33,5 @@ public :
 protected :
     std::string name;
     int drop_gold;
+    int exp;
 };

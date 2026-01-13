@@ -5,6 +5,8 @@
 #include "CommercialProcess.h"
 #include "Shop.h"
 
+CommercialProcess::CommercialProcess() {}
+
 void CommercialProcess::shop_process(Player &player)
 {
     Shop shop;

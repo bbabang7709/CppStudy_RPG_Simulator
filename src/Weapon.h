@@ -29,6 +29,8 @@ public :
     void set_weapon_vigor(int _vigor);
     void set_cost(int _cost);
 
+    const StatBlock get_total_bonus() const override;
+
     virtual void special_attack(Player &user, Character &target) = 0;
 
 protected :

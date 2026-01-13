@@ -15,6 +15,7 @@ enum class InventoryMenu
 {
     Exit = 0,
     Equip,
+    Unequip,
     Expand
 };
 

@@ -8,15 +8,18 @@
 #include "MeterialList.h"
 #include <iostream>
 
-Dragon::Dragon() : Monster("드래곤", 100)
+Dragon::Dragon() : Monster("드래곤", 1000, 100)
 {
-    set_max_hp(500);
-    set_hp(500);
-    set_max_mp(15);
-    set_mp(5);
-    set_power(60);
-    set_defend(15);
-    set_vigor(30);
+    base_stats.hp = 500;
+    base_stats.mp = 5;
+    base_stats.power = 60;
+    base_stats.defend = 15;
+    base_stats.vigor = 30;
+    base_stats.cri = 0;
+    base_stats.speed = 0;
+
+    recalc_final_stats();
+    reset_condition();
 
     drop_table = {
         { 51, ItemID::ReinforceStone },

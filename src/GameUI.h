@@ -16,6 +16,7 @@ public :
     void print_line();
     void print_mainMenu();
     void print_status(Monster &mon, Player &player);
+    void print_equipment(Player &player);
     void print_menu();
     void print_playerInfo(const Player &player);
     void print_monster_type_selection_menu();
@@ -23,10 +24,11 @@ public :
     void print_boss_monster_selection_menu();
     void print_inventory_selection_menu();
     void print_equip_selection_menu();
-    void print_equip_success();
-    void print_equip_fail();
-    void print_expand_success();
-    void print_expand_fail();
+    void print_equip_result(bool TF);
+    void print_unequip_selection_menu();
+    void print_unequip_result(bool TF);
+    void print_expand_result(bool TF);
+    void print_get_exp(int exp);
     void print_get_gold(int drop_gold, int after_gold);
     void print_get_item(std::string item_name);
     void print_save_menu();
@@ -45,5 +47,6 @@ public :
     void print_shop_sell_result(bool TF);
     void print_forge_menu();
     void print_enhance_selection();
+    void print_required_meterial_for_enhance(int level);
     void print_forge_result(EnhanceResult result);
 };

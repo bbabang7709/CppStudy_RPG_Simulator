@@ -14,6 +14,9 @@
 #include <thread>
 #include <chrono>
 
+
+GameProcess::GameProcess(CommercialProcess &CP) : CP(CP) {}
+
 void GameProcess::equip_process(Player &player)
 {
     int choice;
@@ -25,11 +28,23 @@ void GameProcess::equip_process(Player &player)
         choice = safe_int_input();
         if (choice == 0)
             break;
-        if (player.try_equip_inventory_item(choice)) {
-            UI.print_equip_success();
-        } else {
-            UI.print_equip_fail();
-        }
+        bool is_success = player.try_equip_inventory_item(choice);
+        UI.print_equip_result(is_success);
+    }
+}
+void GameProcess::unequip_process(Player &player)
+{
+    int choice;
+    while (true)
+    {
+        clear_screen();
+        UI.print_equipment(player);
+        UI.print_unequip_selection_menu();
+        choice = safe_int_input();
+        if (choice == 0)
+            break;
+        bool is_success = player.try_unequip(choice);
+        UI.print_unequip_result(is_success);
     }
 }
 
@@ -53,11 +68,8 @@ void GameProcess::inventory_expand_process(Player &player)
     if (reply == 0) {
         return;
     } else if (reply == 1) {
-        if (player.expand_inventory()) {
-            UI.print_expand_success();
-        } else {
-            UI.print_expand_fail();
-        }
+        bool is_success = player.expand_inventory();
+        UI.print_expand_result(is_success);
     }
 }
 
@@ -213,7 +225,7 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
     
     while (true)
     {
-        player.reset_status();
+        player.reset_condition();
         clear_screen();
         UI.print_mainMenu();
         reply = safe_int_input();
@@ -261,6 +273,9 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
                 switch (e_select) {
                 case InventoryMenu::Equip :
                     equip_process(player);
+                    break;
+                case InventoryMenu::Unequip :
+                    unequip_process(player);
                     break;
                 case InventoryMenu::Expand :
                     inventory_expand_process(player);

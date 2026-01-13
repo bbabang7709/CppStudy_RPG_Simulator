@@ -7,34 +7,30 @@
 #include <algorithm>
 
 
-Monster::Monster(std::string name, int drop_gold) : name(name), drop_gold(drop_gold) {}
+Monster::Monster(std::string name, int drop_gold, int exp) : name(name), drop_gold(drop_gold), exp(exp) {}
 
 Monster::~Monster() = default;
 
-std::string Monster::get_name() const
-{
-    return name;
-}
-int Monster::get_drop_gold() const
-{
-    return drop_gold;
-}
+std::string Monster::get_name() const { return name; }
+int Monster::get_drop_gold() const { return drop_gold; }
+int Monster::get_exp() const { return exp; }
+
 void Monster::attack(Character &target)
 {
-    int dmg = target.take_damage(power);
+    int dmg = target.take_damage(final_stats.power);
     std::cout << "몬스터의 공격!!" << std::endl;
     std::cout << "플레이어는 " << dmg << " 데미지를 입었다!!" << std::endl;
 }
 void Monster::strong_attack(Character &target)
 {
-    int dmg = target.take_damage(power * 1.7);
+    int dmg = target.take_damage(final_stats.power * 1.7);
     std::cout << "몬스터의 강공격!!" << std::endl;
     std::cout << "플레이어는 " << dmg << " 데미지를 입었다!!" << std::endl;
 }
 void Monster::defend()
 {
-    int def = get_defend() + 2;
-    int pow = get_power() - 2;
+    int def = final_stats.defend + 2;
+    int pow = final_stats.power - 2;
     set_defend(def);
     set_power(pow);
     std::cout << "몬스터가 방어자세를 취했다!!" << std::endl;
@@ -42,8 +38,8 @@ void Monster::defend()
 }
 void Monster::heal()
 {
-    int heal_point = get_vigor();
-    int cur_hp = get_hp();
+    int heal_point = final_stats.vigor;
+    int cur_hp = get_cur_hp();
     set_hp(cur_hp + heal_point);
     std::cout << "몬스터가 " << heal_point << " HP를 회복했다!!" << std::endl;
 }

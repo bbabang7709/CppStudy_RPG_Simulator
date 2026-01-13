@@ -13,13 +13,17 @@
 #include <memory>
 
 
-Slime::Slime() : Monster("슬라임", 5)
+Slime::Slime() : Monster("슬라임", 100, 10)
 {
-    set_max_hp(50);
-    set_hp(50);
-    set_power(15);
-    set_defend(0);
-    set_vigor(3);
+    base_stats.hp = 50;
+    base_stats.power = 15;
+    base_stats.defend = 0;
+    base_stats.vigor = 3;
+    base_stats.cri = 0;
+    base_stats.speed = 0;
+    
+    recalc_final_stats();
+    reset_condition();
 
     drop_table = {
         { 20, ItemID::ReinforceStone },
@@ -34,13 +38,17 @@ const std::vector<DropItem> &Slime::get_drop_table() const
     return drop_table;
 }
 
-Goblin::Goblin() : Monster("고블린", 10)
+Goblin::Goblin() : Monster("고블린", 300, 20)
 {
-    set_max_hp(90);
-    set_hp(90);
-    set_power(20);
-    set_defend(4);
-    set_vigor(10);
+    base_stats.hp = 90;
+    base_stats.power = 25;
+    base_stats.defend = 4;
+    base_stats.vigor = 10;
+    base_stats.cri = 0;
+    base_stats.speed = 0;
+    
+    recalc_final_stats();
+    reset_condition();
 
     drop_table = {
         { 30, ItemID::ReinforceStone },
@@ -55,13 +63,17 @@ const std::vector<DropItem> &Goblin::get_drop_table() const
     return drop_table;
 }
 
-Orc::Orc() : Monster("오크", 20)
+Orc::Orc() : Monster("오크", 500, 30)
 {
-    set_max_hp(120);
-    set_hp(120);
-    set_power(30);
-    set_defend(6);
-    set_vigor(20);
+    base_stats.hp = 120;
+    base_stats.power = 40;
+    base_stats.defend = 8;
+    base_stats.vigor = 25;
+    base_stats.cri = 0;
+    base_stats.speed = 0;
+    
+    recalc_final_stats();
+    reset_condition();
 
     drop_table = {
         { 35, ItemID::ReinforceStone },

@@ -139,6 +139,9 @@ void BattleSystem::reward(Monster &monster, Player &player)
 
     int cur_gold = player.get_inventory().show_gold();
     int drop_gold = monster.get_drop_gold();
+    int drop_exp = monster.get_exp();
+    player.gain_exp(drop_exp);
+    UI.print_get_exp(drop_exp);
     player.get_inventory().earn_gold(drop_gold);
     UI.print_get_gold(drop_gold, cur_gold + drop_gold);
     

@@ -18,6 +18,7 @@ enum class CommercialSelect
 class CommercialProcess : public Sys
 {
 public :
+    CommercialProcess();
     void shop_process(Player &player);
     void forge_process(Player &player);
     void run(Player &player);

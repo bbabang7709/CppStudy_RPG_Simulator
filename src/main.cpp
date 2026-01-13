@@ -23,8 +23,8 @@ int main()
 {    
     Player player;
     PlayerController p_controller;
-
-    GameProcess process;
+    CommercialProcess CP;
+    GameProcess process(CP);
     process.run(player, p_controller);
 
     return 0;

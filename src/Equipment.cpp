@@ -6,6 +6,15 @@
 
 
 Equipment::Equipment(const ItemData &data) : Item(data) {}
+
+const StatBlock Equipment::get_base_bonus() const { return base_bonus; }
+const StatBlock Equipment::get_total_bonus() const 
+{ 
+    StatBlock result = base_bonus;
+
+    return result;
+}
+
 int Equipment::get_enhance_level() const { return enhance_level; }
 bool Equipment::can_enhance() const
 {

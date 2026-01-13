@@ -11,7 +11,9 @@
 class GameProcess : public Sys
 {
 public :
+    GameProcess(CommercialProcess &CP);
     void equip_process(Player &player);
+    void unequip_process(Player &player);
     void inventory_expand_process(Player &player);
     void shop_process(Player &player);
     void forge_process(Player &player);
@@ -22,5 +24,5 @@ public :
 
 private :
     GameUI UI;
-    CommercialProcess CP;
+    CommercialProcess &CP;
 };

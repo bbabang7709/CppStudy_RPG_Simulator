@@ -39,3 +39,11 @@ void Armor::set_armor_vigor(int _vigor)
 {
     armor_vigor = std::max(0, _vigor);
 }
+
+const StatBlock Armor::get_total_bonus() const
+{
+    StatBlock result = base_bonus;
+    result.defend += enhance_level * 2;
+
+    return result;
+}

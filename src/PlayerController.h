@@ -15,5 +15,4 @@ public :
     bool special_attack(Player &player, Character &target);
     bool heal(Player &player);
     bool escape(bool *is_escaped);
-    void reset_status(Player &player);
 };
