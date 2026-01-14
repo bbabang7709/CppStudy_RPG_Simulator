@@ -7,12 +7,14 @@
 
 Equipment::Equipment(const ItemData &data) : Item(data) {}
 
-const StatBlock Equipment::get_base_bonus() const { return base_bonus; }
-const StatBlock Equipment::get_total_bonus() const 
+const StatBlock Equipment::get_flat_stats() const 
 { 
-    StatBlock result = base_bonus;
+    return flat_stats;
+}
 
-    return result;
+const StatPointBlock Equipment::get_stat_point_bonus() const
+{
+    return this->stat_point_bonus;
 }
 
 int Equipment::get_enhance_level() const { return enhance_level; }

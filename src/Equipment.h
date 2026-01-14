@@ -12,8 +12,14 @@ class Equipment : public Item
 public :
     Equipment(const ItemData &data);
     
-    const StatBlock get_base_bonus() const;
-    virtual const StatBlock get_total_bonus() const;
+    int get_atk() const;
+    int get_def() const;
+    int get_vig() const;
+    int get_cri() const;
+
+    bool has_option() const { return true; }
+    const StatBlock get_flat_stats() const override;
+    const StatPointBlock get_stat_point_bonus() const override;
 
     int get_enhance_level() const override;
     bool can_enhance() const;
@@ -22,8 +28,8 @@ public :
     void set_enhance_level(int e_level) override;
     
 protected :
-    StatBlock base_bonus;
-    StatBlock final_bonus;
+    StatBlock flat_stats;
+    StatPointBlock stat_point_bonus;
 
     int enhance_level = 0;
     static constexpr int MAX_ENHANCE = 10;

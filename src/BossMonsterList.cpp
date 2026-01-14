@@ -22,8 +22,8 @@ Dragon::Dragon() : Monster("드래곤", 1000, 100)
     reset_condition();
 
     drop_table = {
-        { 51, ItemID::ReinforceStone },
-        {50, ItemID::DragonScale},
+        { 41, ItemID::ReinforceStone },
+        {40, ItemID::DragonScale},
         {10, ItemID::SoulStone_Dragon},
         {3, ItemID::DragonArmor},
         {1, ItemID::DragonSpear}

@@ -15,6 +15,9 @@ void SaveManager::Save(Player &player)
 
     file << "LEVEL " << player.get_level() << "\n";
     file << "EXP " << player.get_exp() << "\n";
+    file << "STR " << player.get_stat_point_invest().str << "\n";
+    file << "DEX " << player.get_stat_point_invest().dex << "\n";
+    file << "CON " << player.get_stat_point_invest().con << "\n";
     file << "HP " << player.get_base_hp() << "\n";
     file << "MP " << player.get_base_mp() << "\n"; 
     file << "POWER " << player.get_base_power() << "\n";
@@ -53,6 +56,7 @@ void LoadManager::Load(Player &player, std::string file_name)
     std::ifstream file(file_name);
     std::string key;
     int value;
+    StatPointBlock saved_stat_point;
 
     int weapon_id = -1;
     int weapon_enhance = 0;
@@ -63,6 +67,9 @@ void LoadManager::Load(Player &player, std::string file_name)
     {
         if (key == "LEVEL") player.set_level(value);
         else if (key == "EXP") player.gain_exp(value);
+        else if (key == "STR") saved_stat_point.str += value;
+        else if (key == "DEX") saved_stat_point.dex += value;
+        else if (key == "CON") saved_stat_point.con += value;
         else if (key == "HP") player.set_max_hp(value);
         else if (key == "MP") player.set_max_mp(value);
         else if (key == "POWER") player.set_power(value);
@@ -89,6 +96,12 @@ void LoadManager::Load(Player &player, std::string file_name)
         else if (key == "ARMOR") armor_id = value;
         else if (key == "ARMOR_ENHANCE") armor_enhance = value;
     }
+    player.set_stat_point((player.get_level() - 1) * 5);
+    player.invest_stat_point(saved_stat_point);
+    // player.invest_stat_point(StatPointType::STR, saved_stat_point.str);
+    // player.invest_stat_point(StatPointType::DEX, saved_stat_point.dex);
+    // player.invest_stat_point(StatPointType::CON, saved_stat_point.con);
+
     if (weapon_id != -1) {
         if (player.get_my_weapon() == nullptr) {
             auto item = item_factory.create(static_cast<ItemID>(weapon_id));

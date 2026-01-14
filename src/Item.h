@@ -6,6 +6,7 @@
 #include "ItemType.h"
 #include "ItemID.h"
 #include "ItemDatabase.h"
+#include "StatBlock.h"
 #include <string>
 
 class Item
@@ -27,6 +28,10 @@ public :
     virtual bool is_enhanceable() const { return false; };
     virtual int get_enhance_level() const { return 0; };
     virtual void set_enhance_level(int) {};
+
+    virtual bool has_option() const { return false; }
+    virtual const StatBlock get_flat_stats() const { return {}; }
+    virtual const StatPointBlock get_stat_point_bonus() const { return {}; }
 
     //virtual void use() = 0;
 

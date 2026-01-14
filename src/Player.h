@@ -4,20 +4,14 @@
  ******************************************/
 #pragma once
 #include "Character.h"
+#include "StatPointType.h"
 #include "Weapon.h"
 #include "Armor.h"
 #include "Inventory.h"
 #include "EnhanceSystem.h"
 #include "GameUI.h"
 
-enum class StatType
-{
-    HP,
-    MP,
-    POWER,
-    DEFEND,
-    VIGOR
-};
+
 
 class Player : public Character
 {
@@ -47,7 +41,12 @@ public :
     void set_level(int _level);
 
     int get_stat_point() const;
-    bool invest_stat_point(StatType type, int amount);
+    void set_stat_point(int point);
+    void calc_stat_point_invest(StatPointBlock s1);
+    StatPointBlock get_stat_point_invest() const;
+    StatPointBlock get_stat_point_total() const;
+    bool invest_stat_point(StatPointType type, int amount);
+    bool invest_stat_point(StatPointBlock sb);
     void reset_stat_point();
 
     void attack(Character &target);
@@ -60,6 +59,7 @@ public :
     std::string get_armor_name() const;
     bool equip_item(std::unique_ptr<Item> item);
     bool try_equip_inventory_item(int index);
+    bool try_request_item_info(int index);
     std::unique_ptr<Weapon> unequip_Weapon();
     std::unique_ptr<Armor> unequip_Armor();
     bool try_unequip(int index);
@@ -86,6 +86,10 @@ private :
     
     // Stat Point
     int stat_point = 0;
+
+    StatPointBlock stat_point_invest;
+    StatPointBlock stat_point_item;
+    StatPointBlock stat_point_total;
 
     void level_up();
     void recalc_final_stats() override;

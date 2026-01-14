@@ -4,6 +4,7 @@
  ******************************************/
 #include "Item.h"
 #include "ItemFactory.h"
+#include <iostream>
 
 Item::Item(const ItemData &data) : id(data.id), name(data.name), type(data.type), price(data.price) {}
 Item::~Item() = default;

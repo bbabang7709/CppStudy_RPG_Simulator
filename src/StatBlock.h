@@ -14,6 +14,7 @@ struct StatBlock
     int cri = 0;
     int speed = 0;
 
+    void clear() { *this = {}; }
     StatBlock &operator+=(const StatBlock &rhs) {
         hp += rhs.hp;
         mp += rhs.mp;
@@ -22,6 +23,21 @@ struct StatBlock
         vigor += rhs.vigor;
         cri += rhs.cri;
         speed += rhs.speed;
+
+        return *this;
+    }
+};
+
+struct StatPointBlock
+{
+    int str = 0;
+    int dex = 0;
+    int con = 0;
+
+    StatPointBlock &operator+=(const StatPointBlock &other) {
+        str += other.str;
+        dex += other.dex;
+        con += other.con;
 
         return *this;
     }

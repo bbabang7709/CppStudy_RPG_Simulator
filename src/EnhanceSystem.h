@@ -23,6 +23,7 @@ enum class EnhanceResult
     MaxLevel,
     noMeterial,
     Disable,
+    Canceled,
     Error
 };
 

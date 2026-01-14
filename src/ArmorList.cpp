@@ -8,20 +8,21 @@
 
 NormalArmor::NormalArmor() : Armor(ItemDatabase::get(ItemID::NormalArmor))
 {
-    base_bonus.hp = 10;
-    base_bonus.defend = 4;
+    flat_stats.hp = 10;
+    flat_stats.defend = 4;
 }
+
 GoblinArmor::GoblinArmor() : Armor(ItemDatabase::get(ItemID::GoblinArmor))
 {
-    base_bonus.hp = 25;
-    base_bonus.defend = 7;
-    base_bonus.vigor = 5;
+    flat_stats.hp = 25;
+    flat_stats.defend = 7;
+    flat_stats.vigor = 5;
 }
 
 DragonArmor::DragonArmor() : Armor(ItemDatabase::get(ItemID::DragonArmor))
 {
-    base_bonus.hp = 50;
-    base_bonus.defend = 15;
-    base_bonus.vigor = 10;
-    base_bonus.cri = 5;
+    flat_stats.hp = 50;
+    flat_stats.defend = 15;
+    flat_stats.vigor = 10;
+    flat_stats.cri = 5;
 }

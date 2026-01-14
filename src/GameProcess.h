@@ -12,11 +12,11 @@ class GameProcess : public Sys
 {
 public :
     GameProcess(CommercialProcess &CP);
+    void player_info_process(Player &player);
+    void itemInfo_process(Player &player);
     void equip_process(Player &player);
     void unequip_process(Player &player);
     void inventory_expand_process(Player &player);
-    void shop_process(Player &player);
-    void forge_process(Player &player);
     void NormalMonsterBattle(Player &player, PlayerController &p_controller);
     void BossMonsterBattle(Player &player, PlayerController &p_controller);
 

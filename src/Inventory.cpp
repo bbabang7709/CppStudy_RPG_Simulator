@@ -3,6 +3,7 @@
  *  인벤토리 클래스 정의
  ******************************************/
 #include "Inventory.h"
+#include "Equipment.h"
 #include <iostream>
 
 Inventory::Inventory() : gold(0), max_size(10) {}
@@ -197,3 +198,73 @@ void Inventory::reset_inventory()
     slots.clear();
 }
 
+bool Inventory::print_item_info(int inventory_index)
+{
+    int index = inventory_index - 1;
+    if (index < 0 || index >= static_cast<int>(slots.size()))
+        return false;
+    auto &item = slots[index].item;
+    if (!item) 
+        return false;
+
+    std::cout << "========================================" << std::endl;
+
+    ItemType type = item->get_type();
+    switch (type)
+    {
+    case ItemType::Weapon :
+        std::cout << "[무기] ";
+        break;
+    case ItemType::Armor :
+        std::cout << "[방어구] ";
+        break;
+    case ItemType::Meterial :
+        std::cout << "[재료] ";
+        break;
+    case ItemType::Potion :
+        std::cout << "[포션] ";
+        break;
+    default :
+        return false;
+    }
+
+    std::cout << item->get_name();
+    if (item->is_enhanceable()) {
+        std::cout << " + " << item->get_enhance_level();
+    }
+    std::cout << std::endl << std::endl;
+    
+    std::cout << "가격 : " << item->get_price() << " 골드" << std::endl << std::endl;
+
+    if (item->has_option()) {
+        std::cout << "[옵션]" << std::endl;
+        if (item->get_flat_stats().power) {
+            std::cout << "공격력 + " << item->get_flat_stats().power;
+            if (item->get_type() == ItemType::Weapon && item->get_enhance_level()) {
+                std::cout << "(강화 : + " << item->get_enhance_level() * 5 << ")";
+            }
+            std::cout << std::endl;
+        }    
+        if (item->get_flat_stats().defend) {
+            std::cout << "방어력 + " << item->get_flat_stats().defend;
+            if (item->get_type() == ItemType::Armor && item->get_enhance_level()) {
+                std::cout << "(강화 : + " << item->get_enhance_level() * 2 << ")";
+            }
+            std::cout << std::endl;
+        }
+        if (item->get_flat_stats().vigor)
+            std::cout << "활력 + " << item->get_flat_stats().vigor << std::endl;
+        if (item->get_flat_stats().hp)
+            std::cout << "HP + " << item->get_flat_stats().hp << std::endl;
+        if (item->get_flat_stats().mp)
+            std::cout << "MP + " << item->get_flat_stats().mp << std::endl;
+        if (item->get_flat_stats().cri)
+            std::cout << "크리티컬 확률 + " << item->get_flat_stats().cri << std::endl;
+        if (item->get_flat_stats().speed)
+            std::cout << "스피드 + " << item->get_flat_stats().speed << std::endl;
+    }
+
+    std::cout << "========================================" << std::endl;
+
+    return true;
+}

@@ -47,6 +47,6 @@ public :
     void print_shop_sell_result(bool TF);
     void print_forge_menu();
     void print_enhance_selection();
-    void print_required_meterial_for_enhance(int level);
+    void print_required_meterial_for_enhance(const int &level);
     void print_forge_result(EnhanceResult result);
 };

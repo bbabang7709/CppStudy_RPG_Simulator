@@ -17,6 +17,94 @@
 
 GameProcess::GameProcess(CommercialProcess &CP) : CP(CP) {}
 
+void GameProcess::player_info_process(Player &player)
+{
+    while (true)
+    {
+        clear_screen();
+        UI.print_playerInfo(player);
+        std::cout << "========= 무엇을 할까? =========" << std::endl;
+        std::cout << "0. 돌아가기" << std::endl;
+        std::cout << "1. 스탯 포인트 분배" << std::endl;
+        std::cout << "2. 스탯 포인트 초기화" << std::endl;
+        std::cout << "===============================" << std::endl;
+        std::cout << "입력 >>> ";
+        int c1 = safe_int_input();
+        if (c1 == 0)
+            break;
+        else if (c1 == 1) {
+            while (true)
+            {
+                clear_screen();
+                auto stats = player.get_stat_point_total();
+                int amount = 0;
+                std::cout << "===============================" << std::endl;
+                std::cout << "STR : " << stats.str << "   DEX : " << stats.dex << "   CON : " << stats.con << std::endl << std::endl;
+                std::cout << "남은 스탯포인트 : " << player.get_stat_point() << std::endl;
+                std::cout << "===============================" << std::endl << std::endl;
+                std::cout << "========= 어떻게 할까? =========" << std::endl;
+                std::cout << "0. 돌아가기." << std::endl;
+                std::cout << "1. STR에 분배" << std::endl;
+                std::cout << "2. DEX에 분배" << std::endl;
+                std::cout << "3. CON에 분배" << std::endl;
+                std::cout << "===============================" << std::endl;
+                std::cout << "입력 >>> ";
+                int c2 = safe_int_input(1, 3);
+                if (c2 != 1 && c2 != 2 && c2 != 3)
+                    break;
+                if (player.get_stat_point() == 0)
+                    continue;
+                std::cout << "얼마나 분배하시겠습니까??" << std::endl;
+                std::cout << "입력 >>> ";
+                amount = safe_int_input();
+                if (amount < 0 ) {
+                    UI.print_error_screen();
+                    continue;
+                }
+                if (amount > player.get_stat_point()) {
+                    std::cout << "포인트가 부족합니다." << std::endl;
+                    delay(1000);
+                    continue;
+                }
+                if (c2 == 1) {
+                    player.invest_stat_point(StatPointType::STR, amount);
+                } else if (c2 == 2) {
+                    player.invest_stat_point(StatPointType::DEX, amount);
+                } else if (c2 == 3) {
+                    player.invest_stat_point(StatPointType::CON, amount);
+                } else 
+                    break;
+            }
+        } else if (c1 == 2) {
+            player.reset_stat_point();
+            std::cout << "초기화 되었습니다." << std::endl;
+            delay(1000);
+        }
+    }
+}
+
+void GameProcess::itemInfo_process(Player &player)
+{
+    while (true)
+    {
+        clear_screen();
+        auto &inventory = player.get_inventory();
+        inventory.list_inventory();
+        std::cout << "정보를 확인할 아이템을 선택하세요. (0 : 돌아가기)" << std::endl;
+        std::cout << "입력 >>> ";
+        int c = safe_int_input();
+        clear_screen();
+        if (c == 0) 
+            break;
+        if (!player.try_request_item_info(c)) {
+            std::cout << "오류가 발생했습니다." << std::endl;
+            continue;
+        }
+        std::cout << std::endl << "계속하려면 Enter...";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.get();
+    }
+}
 void GameProcess::equip_process(Player &player)
 {
     int choice;
@@ -73,83 +161,6 @@ void GameProcess::inventory_expand_process(Player &player)
     }
 }
 
-void GameProcess::shop_process(Player &player)
-{
-    Shop shop;
-    int c1 = 0, index = 0;
-    bool is_success;
-
-    while (true)
-    {
-        UI.print_shop_menu();
-        c1 = safe_int_input();
-        if (c1 == 0) 
-            break;
-        else if (c1 == 1) {
-            while (true) {
-                clear_screen();
-                shop.list_items();
-                player.get_inventory().list_inventory();
-                UI.print_shop_buy_menu();
-                index = safe_int_input();
-                if (index == 0)
-                    break;
-                if (index < 0 || index > shop.slot_size) {
-                    UI.print_error_screen();
-                    continue;
-                }
-                is_success = player.buy_item(shop.get_item(index));
-                UI.print_shop_buy_result(is_success);
-            }
-        } else if (c1 == 2) {
-            while (true) {
-                clear_screen();
-                player.get_inventory().list_inventory();
-                UI.print_shop_sell_menu();
-                index = safe_int_input();
-                if (index == 0)
-                    break;
-                if (index < 0 || index > (int)player.get_inventory().get_slots().size()) {
-                    UI.print_error_screen();
-                    continue;
-                }
-                UI.print_ask_sell_count();
-                int sell_count = safe_int_input();
-                if (sell_count == 0)
-                    continue;
-                is_success = player.sell_item(index, sell_count);
-                UI.print_shop_sell_result(is_success);
-            }
-        } else {
-            UI.print_error_screen();
-        }
-    }
-}
-void GameProcess::forge_process(Player &player)
-{
-    int c = 0, index = 0;
-    while (true)
-    {
-        clear_screen();
-        UI.print_forge_menu();
-        c = safe_int_input();
-        if (c == 0)
-            break;
-        else if (c == 1) {
-            while (true)
-            {
-                clear_screen();
-                player.get_inventory().list_inventory();
-                UI.print_enhance_selection();
-                index = safe_int_input();
-                if (index == 0) 
-                    break;
-                EnhanceResult result = player.enhance_item(index);
-                UI.print_forge_result(result);
-            }
-        }
-    }
-}
 void GameProcess::NormalMonsterBattle(Player &player, PlayerController &p_controller)
 {
     clear_screen();
@@ -260,7 +271,7 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
             break;
         }
         case MenuSelection::PlayerInfo :
-            UI.print_playerInfo(player);
+            player_info_process(player);
             break;
         case MenuSelection::Inventory :
         {
@@ -271,6 +282,9 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
                 UI.print_inventory_selection_menu();
                 InventoryMenu e_select = static_cast<InventoryMenu>(safe_int_input());
                 switch (e_select) {
+                case InventoryMenu::ItemInfo :
+                    itemInfo_process(player);
+                    break;
                 case InventoryMenu::Equip :
                     equip_process(player);
                     break;

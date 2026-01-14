@@ -14,6 +14,7 @@
 enum class InventoryMenu
 {
     Exit = 0,
+    ItemInfo,
     Equip,
     Unequip,
     Expand
@@ -48,6 +49,7 @@ public :
     void list_inventory() const;
     void reset_inventory();
 
+    bool print_item_info(int inventory_index);
 
 private:
     std::vector<std::unique_ptr<Item>> items;

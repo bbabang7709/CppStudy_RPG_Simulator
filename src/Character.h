@@ -4,6 +4,7 @@
  ******************************************/
 #pragma once
 
+#include "StatPointType.h"
 #include "StatBlock.h"
 
 class Character
@@ -41,6 +42,12 @@ public :
     int take_damage(int damage);
 
 protected :
+    
+    int ATK;
+    int DEF;
+    int max_HP;
+    int max_MP;
+
     StatBlock base_stats;
     StatBlock final_stats;
     int cur_hp;

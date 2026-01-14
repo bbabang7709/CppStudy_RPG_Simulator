@@ -46,10 +46,10 @@ void Weapon::set_cost(int _cost)
     cost = std::max(0, _cost);
 }
 
-const StatBlock Weapon::get_total_bonus() const
+const StatBlock Weapon::get_flat_stats() const
 {
-    StatBlock result = base_bonus;
-    result.defend += enhance_level * 2;
+    StatBlock result = flat_stats;
+    result.power += enhance_level * 5;
 
     return result;
 }

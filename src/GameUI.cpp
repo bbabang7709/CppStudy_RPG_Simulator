@@ -68,14 +68,18 @@ void GameUI::print_menu()
 void GameUI::print_playerInfo(const Player &player)
 {
     clear_screen();
-    auto stats = player.get_final_stats();
+    const auto &stats = player.get_final_stats();
     std::cout << "======== 플레이어 정보 ========" << std::endl;
     std::cout << "LV. " << player.get_level() << "   exp : " << player.get_exp() << " / " << ExpTable::get_required_exp(player.get_level()) << std::endl;
+    std::cout << "STR : " << player.get_stat_point_total().str << "   DEX : " << player.get_stat_point_total().dex << std::endl;
+    std::cout << "CON : " << player.get_stat_point_total().con << std::endl;
     std::cout << "HP : " << stats.hp << std::endl;
     std::cout << "MP : " << stats.mp << std::endl;
     std::cout << "공격력 : " << stats.power << std::endl;
     std::cout << "방어력 : " << stats.defend << std::endl;
-    std::cout << "활력 : " << stats.vigor << std::endl << std::endl;
+    std::cout << "활력 : " << stats.vigor << std::endl;
+    std::cout << "치명타 확률 : " << stats.cri << "%" << std::endl;
+    std::cout << "속도 : " << stats.speed << std::endl << std::endl;
     std::cout << "무기 : " << player.get_weapon_name();
     if (player.get_my_weapon()) {
         std::cout << " + " << player.get_my_weapon()->get_enhance_level();
@@ -85,11 +89,7 @@ void GameUI::print_playerInfo(const Player &player)
     if (player.get_my_armor()) {
         std::cout << " + " << player.get_my_armor()->get_enhance_level();
     }
-    std::cout << std::endl;
-    std::cout << "==============================" << std::endl;
-    std::cout << "계속하려면 Enter...";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cin.get();
+    std::cout << std::endl << std::endl;
 }
 void GameUI::print_monster_type_selection_menu()
 {
@@ -123,9 +123,10 @@ void GameUI::print_inventory_selection_menu()
     std::cout << "무엇을 하시겠습니까?" << std::endl;
     std::cout << "========== 인벤토리 ==========" << std::endl;
     std::cout << "0. 돌아가기" << std::endl;
-    std::cout << "1. 아이템 장착" << std::endl;
-    std::cout << "2. 아이템 해제" << std::endl;
-    std::cout << "3. 인벤토리 확장" << std::endl;
+    std::cout << "1. 아이템 정보" << std::endl;
+    std::cout << "2. 아이템 장착" << std::endl;
+    std::cout << "3. 아이템 해제" << std::endl;
+    std::cout << "4. 인벤토리 확장" << std::endl;
     std::cout << "==============================" << std::endl;
     std::cout << "입력 >>> ";                
 }
@@ -172,7 +173,7 @@ void GameUI::print_expand_result(bool TF)
 }
 void GameUI::print_get_exp(int exp)
 {
-    std::cout << exp << " 경험치를 얻었다!!" << std::endl;
+    std::cout << exp << " 경험치를 얻었다!!" << std::endl << std::endl;
     delay(1000);
 }
 void GameUI::print_get_gold(int drop_gold, int after_gold)
@@ -299,12 +300,13 @@ void GameUI::print_enhance_selection()
     std::cout << "강화할 장비를 선택하세요. (0 : 돌아가기)" << std::endl;
     std::cout << "입력 >>> ";
 }
-void GameUI::print_required_meterial_for_enhance(int level)
+void GameUI::print_required_meterial_for_enhance(const int &level)
 {
+    int index = 0;
     EnhanceRule rule = EnhanceSystem::get_rule(level);
     std::cout <<"======필요한 재료======" << std::endl;
-    std::cout << "장비 강화석 : " << rule.meterial_cost << std::endl;
-    std::cout << "골드 : " << rule.gold_cost << std:: endl;
+    std::cout << ++index << ". 장비 강화석 x " << rule.meterial_cost << std::endl;
+    std::cout << ++index << ". " << rule.gold_cost << " 골드" << std:: endl;
     std::cout <<"======================" << std::endl;
     std::cout << "정말 강화하시겠습니까?? (진행하려면 아무 숫자 입력 / 0 : 돌아가기)" << std::endl;
     std::cout << "입력 >>> ";
@@ -331,6 +333,8 @@ void GameUI::print_forge_result(EnhanceResult result)
         break;
     case EnhanceResult::Disable :
         std::cout << "강화할 수 없는 아이템입니다." << std::endl;
+        break;
+    case EnhanceResult::Canceled :
         break;
     case EnhanceResult::Error :
         std::cout << "오류가 발생했습니다." << std::endl;
