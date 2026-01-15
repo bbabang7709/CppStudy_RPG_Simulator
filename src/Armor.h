@@ -26,11 +26,4 @@ public :
     void set_armor_vigor(int _vigor);
 
     const StatBlock get_flat_stats() const override;
-
-protected :
-    int armor_power;
-    int armor_defend;
-    int armor_hp;
-    int armor_mp;
-    int armor_vigor;
 };

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Monster.h"
+#include "BattleSystem.h"
 #include "ItemFactory.h"
 #include "Sys.h"
 
@@ -18,11 +19,11 @@ class Dragon : public Monster
 {
 public :
     Dragon();
-    void special_pattern(Character &target);
     const std::vector<DropItem> &get_drop_table() const override;
+    void take_turn(BattleContext &context) override;
 
 private :
     std::vector<DropItem> drop_table;
     ItemFactory item_factory;
-    Sys system;
+    void dragon_breathe(Player &target);
 };

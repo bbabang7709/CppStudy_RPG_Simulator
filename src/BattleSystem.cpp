@@ -13,9 +13,8 @@
 #include <chrono>
 #include <thread>
 
-BattleSystem::BattleSystem(Player &p, PlayerController &p_controller, Monster &m, MonsterAI &ai) : player(p), p_controller(p_controller),
-                                                                                                   monster(m), ai(ai),
-                                                                                                   turn(0), is_escaped(false) {};
+BattleSystem::BattleSystem(Player &p, PlayerController &p_controller, Monster &m, MonsterAI &ai, GameUI &UI) 
+            : player(p), p_controller(p_controller), monster(m), ai(ai), UI(UI), turn(0), is_escaped(false) {}
 
 int BattleSystem::get_turn() { return turn; }
 
@@ -45,7 +44,7 @@ void BattleSystem::start_battle()
         }
         player.set_mp(std::min((player.get_mp() + 1), player.get_max_mp()));
 
-        monster_turn();
+        monsterPhase();
         if (is_battle_end()) {
             std::cout << "이런... 눈 앞이 캄캄해진다..." << std::endl;
             delay(2000);
@@ -53,6 +52,20 @@ void BattleSystem::start_battle()
         }
         monster.set_mp(std::min((monster.get_mp() + 1), monster.get_max_mp()));
     }
+}
+
+int BattleSystem::calculate_damage(const Player &player)
+{
+    const auto &stats = player.get_final_stats();
+
+    int dmg = stats.power;
+    int roll = Random::range(1, 100);
+    if (roll <= stats.cri) {
+        dmg = static_cast<int>(dmg * stats.criDamage);
+        std::cout << "Critical !!! ";
+    }
+
+    return dmg;
 }
 
 void BattleSystem::player_turn()
@@ -101,6 +114,13 @@ void BattleSystem::player_turn()
             clear_screen();
     }
 }
+
+void BattleSystem::monsterPhase()
+{
+    BattleContext context(this->player, this->monster, this->turn);
+    monster.take_turn(context);
+    this->monster.update_buffs();
+}
 void BattleSystem::monster_turn()
 {
     MonsterAction action = ai.decide_action(monster);
@@ -125,6 +145,12 @@ void BattleSystem::monster_turn()
     delay(1000);
     std::cout << std::endl;
 }
+
+void BattleSystem::playerPhase()
+{
+
+}
+
 
 bool BattleSystem::is_battle_end()
 {

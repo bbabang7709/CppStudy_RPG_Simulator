@@ -5,6 +5,7 @@
 #include "Character.h"
 #include "Player.h"
 #include "PlayerController.h"
+#include "BattleSystem.h"
 
 #include <iostream>
 
@@ -12,9 +13,10 @@ PlayerController::PlayerController() {}
 
 bool PlayerController::normal_attack(Player &player, Character &target)
 {
-    int dmg = target.take_damage(player.get_final_stats().power);
+    //int dmg = target.take_damage(player.get_final_stats().power);
     std::cout << "플레이어의 일반 공격!!" << std::endl;
-    std::cout << "몬스터는 " << dmg << " 데미지를 입었다!!" << std::endl;
+    int dmg = BattleSystem::calculate_damage(player);
+    target.take_damage(dmg);
     return true;
 }
 bool PlayerController::special_attack(Player &player, Character &target)

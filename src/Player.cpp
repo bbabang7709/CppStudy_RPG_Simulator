@@ -12,15 +12,16 @@
 
 GameUI UI;
 
-Player::Player()
+Player::Player() : Character("플레이어")
 {
-    base_stats.hp = 100;
+    base_stats.hp = 200;
     base_stats.mp = 5;
     base_stats.power = 10;
     base_stats.defend = 5;
     base_stats.vigor = 30;
-    base_stats.cri = 0;
-    base_stats.speed = 0;
+    base_stats.cri = 5;
+    base_stats.criDamage = 1.5f;
+    base_stats.speed = 0;   
 
     recalc_final_stats();
     reset_condition();
@@ -157,13 +158,16 @@ void Player::reset_stat_point()
     recalc_final_stats();
 }
 
-//============== Calc Stats ==============//
+//============== Calc Final Stats ==============//
 
 void Player::recalc_final_stats()
 {
     final_stats = base_stats;
-
     stat_point_total = stat_point_invest;
+
+    for (auto &buf : active_buffs) {
+        final_stats += buf.effect;
+    }
 
     if (my_weapon) {
         final_stats += my_weapon->get_flat_stats();
@@ -175,12 +179,18 @@ void Player::recalc_final_stats()
     }
     stat_point_total += stat_point_item;
 
-    final_stats.power += stat_point_total.str * 3;
-    final_stats.cri += (stat_point_total.str / 5);
-    final_stats.power += stat_point_total.dex * 1;
-    final_stats.speed += stat_point_total.dex * 10;
-    final_stats.hp += stat_point_total.con * 15;
-    final_stats.vigor += stat_point_total.con * 3;
+    const auto &sp = stat_point_total;
+    // stat "STR"
+    final_stats.power += sp.str;
+    final_stats.cri += (sp.str / 5);
+    final_stats.criDamage += (sp.str / 10) * 0.01f;
+    // stat "DEX"
+    final_stats.speed += sp.dex * 10;
+    final_stats.cri += (sp.dex / 3);
+    final_stats.criDamage += (sp.dex / 5) * 0.1f;
+    // stat "CON"
+    final_stats.hp += sp.con * 15;
+    final_stats.vigor += sp.con * 3;
 }
 
 void Player::reset_player()
@@ -189,6 +199,8 @@ void Player::reset_player()
         unequip_Weapon();
     if (get_my_armor())
         unequip_Armor();
+
+    final_stats = base_stats;
     reset_stat_point();
     stat_point = 0;
     level = 1;
@@ -333,14 +345,23 @@ EnhanceResult Player::enhance_item(int inventory_index)
 
     if (!slot.item->is_enhanceable())
         return EnhanceResult::Disable;
+
     auto target_item = dynamic_cast<Equipment *>(slot.item.get());
+    
     if (!target_item)
         return EnhanceResult::Error;
     if (!target_item->can_enhance())
         return EnhanceResult::MaxLevel;
 
+    UI.clear_screen();
+    std::cout << "====[ 강화할 장비 ]====" << std::endl << std::endl;
+    std::cout << "  " << target_item->get_name() << " + " << target_item->get_enhance_level() << std::endl << std::endl;
+    std::cout << "=======================" << std::endl << std::endl;
     UI.print_required_meterial_for_enhance(target_item->get_enhance_level());
+    
+    
     int c = UI.safe_int_input();
+    
     if (c == 0)
         return EnhanceResult::Canceled;
 

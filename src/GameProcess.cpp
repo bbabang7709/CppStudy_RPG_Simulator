@@ -29,7 +29,7 @@ void GameProcess::player_info_process(Player &player)
         std::cout << "2. 스탯 포인트 초기화" << std::endl;
         std::cout << "===============================" << std::endl;
         std::cout << "입력 >>> ";
-        int c1 = safe_int_input();
+        int c1 = safe_int_input_without_enter();
         if (c1 == 0)
             break;
         else if (c1 == 1) {
@@ -49,9 +49,11 @@ void GameProcess::player_info_process(Player &player)
                 std::cout << "3. CON에 분배" << std::endl;
                 std::cout << "===============================" << std::endl;
                 std::cout << "입력 >>> ";
-                int c2 = safe_int_input(1, 3);
-                if (c2 != 1 && c2 != 2 && c2 != 3)
+                int c2 = safe_int_input_without_enter(0, 3);
+                if (c2 == 0)
                     break;
+                if (c2 != 1 && c2 != 2 && c2 != 3)
+                    continue;
                 if (player.get_stat_point() == 0)
                     continue;
                 std::cout << "얼마나 분배하시겠습니까??" << std::endl;
@@ -172,24 +174,31 @@ void GameProcess::NormalMonsterBattle(Player &player, PlayerController &p_contro
     mon_type = static_cast<NormalMonsterType>(select);
     switch (mon_type)
     {
+    case NormalMonsterType::Tutorial :
+    {
+        Tutorial monster;
+        BattleSystem battleSystem(player, p_controller, monster, ai, UI);
+        battleSystem.start_battle();
+        break;
+    }
     case NormalMonsterType::Slime :
     {
         Slime monster;
-        BattleSystem battleSystem(player, p_controller, monster, ai);
+        BattleSystem battleSystem(player, p_controller, monster, ai, UI);
         battleSystem.start_battle();
         break;
     }
     case NormalMonsterType::Goblin :
     {
         Goblin monster;
-        BattleSystem battleSystem(player, p_controller, monster, ai);
+        BattleSystem battleSystem(player, p_controller, monster, ai, UI);
         battleSystem.start_battle();
         break;
     }
     case NormalMonsterType::Orc :
     {
         Orc monster;
-        BattleSystem battleSystem(player, p_controller, monster, ai);
+        BattleSystem battleSystem(player, p_controller, monster, ai, UI);
         battleSystem.start_battle();
         break;
     }
@@ -218,7 +227,7 @@ void GameProcess::BossMonsterBattle(Player &player, PlayerController &p_controll
     case BossMonsterType::Dragon :
     {
         Dragon monster;
-        BattleSystem battleSystem(player, p_controller, monster, ai);
+        BattleSystem battleSystem(player, p_controller, monster, ai, UI);
         battleSystem.start_battle();
         break;
     }
@@ -239,11 +248,11 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
         player.reset_condition();
         clear_screen();
         UI.print_mainMenu();
-        reply = safe_int_input();
-        if (reply == -1) {
-            UI.print_error_screen();
-            continue;
-        }
+        reply = safe_int_input_without_enter();
+        // if (reply == -1) {
+        //     UI.print_error_screen();
+        //     continue;
+        // }
         MenuSelection index = static_cast<MenuSelection>(reply);
         switch (index)
         {
@@ -252,7 +261,7 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
             clear_screen();
             int mon_type_select;
             UI.print_monster_type_selection_menu();
-            mon_type_select = safe_int_input();
+            mon_type_select = safe_int_input_without_enter();
             MonsterType result = static_cast<MonsterType>(mon_type_select);
             switch (result)
             {
@@ -280,7 +289,7 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
                 clear_screen();
                 player.get_inventory().list_inventory();
                 UI.print_inventory_selection_menu();
-                InventoryMenu e_select = static_cast<InventoryMenu>(safe_int_input());
+                InventoryMenu e_select = static_cast<InventoryMenu>(safe_int_input_without_enter());
                 switch (e_select) {
                 case InventoryMenu::ItemInfo :
                     itemInfo_process(player);
@@ -309,7 +318,7 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
             int save_choice;
             SaveManager save_manager;
             UI.print_save_menu();
-            save_choice = safe_int_input();
+            save_choice = safe_int_input_without_enter();
             if (save_choice == 1) {
                 save_manager.Save(player);
                 UI.print_save_success();
@@ -321,7 +330,7 @@ void GameProcess::run(Player &player, PlayerController &p_controller)
             int load_choice;
             LoadManager load_manager;
             UI.print_load_menu();
-            load_choice = safe_int_input();
+            load_choice = safe_int_input_without_enter();
             if (load_choice == 1) {
                 load_manager.Load(player, "save.txt");
                 UI.print_load_success();

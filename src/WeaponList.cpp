@@ -27,7 +27,6 @@ void NormalWeapon::special_attack(Player &user, Character &target)
 SlimeSword::SlimeSword() : Weapon(ItemDatabase::get(ItemID::SlimeSword))
 {
     flat_stats.power = 20;
-    flat_stats.defend = 3;
     flat_stats.vigor = 20;
     flat_stats.cri = 10;
     cost = 3;
@@ -48,9 +47,9 @@ void SlimeSword::special_attack(Player &user, Character &target)
 
 PowerGauntlet::PowerGauntlet() : Weapon(ItemDatabase::get(ItemID::PowerGauntlet))
 {
-    flat_stats.power = 35;
+    flat_stats.power = 40;
     flat_stats.defend = 8;
-    flat_stats.hp = 30;
+    flat_stats.hp = 40;
     flat_stats.cri = 10;
     cost = 5;
 }
@@ -70,12 +69,12 @@ void PowerGauntlet::special_attack(Player &user, Character &target)
 
 DragonSpear::DragonSpear() : Weapon(ItemDatabase::get(ItemID::DragonSpear))
 {
-    flat_stats.hp = 50;
+    flat_stats.hp = 100;
     flat_stats.mp = 7;
-    flat_stats.power = 70;
-    flat_stats.defend = 10;
+    flat_stats.power = 80;
+    flat_stats.defend = 15;
     flat_stats.vigor = 20;
-    flat_stats.cri = 20;
+    flat_stats.cri = 15;
     cost = 7;
 }
 void DragonSpear::special_attack(Player &user, Character &target)

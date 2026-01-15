@@ -34,11 +34,6 @@ public :
     virtual void special_attack(Player &user, Character &target) = 0;
 
 protected :
-    int weapon_power;
-    int weapon_defend;
-    int weapon_hp;
-    int weapon_mp;
-    int weapon_vigor;
     int cost;
     Sys system;
 };

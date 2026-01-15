@@ -8,6 +8,7 @@
 #include <chrono>
 #include <limits>
 #include <string>
+#include <conio.h>
 
 
 
@@ -54,5 +55,37 @@ int Sys::safe_int_input(int min, int max)
     }
     catch (...) {
         return -1;
+    }
+}
+
+int Sys::safe_int_input_without_enter()
+{
+    while (true)
+    {
+        char c = _getch();
+
+        if (c >= '0' && c <= '9') {
+            std::cout << c << std::endl;
+            return c - '0';
+        }
+
+        if (c == 27)
+            return 0;
+    }
+}
+
+int Sys::safe_int_input_without_enter(int min, int max)
+{
+    while (true)
+    {
+        char c = _getch();
+
+        if (c >= '0' + min && c <= '0' + max) {
+            std::cout << c << std::endl;
+            return c - '0';
+        }
+
+        if (c == 27)
+            return 0;
     }
 }

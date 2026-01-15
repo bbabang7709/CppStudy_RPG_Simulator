@@ -259,7 +259,9 @@ bool Inventory::print_item_info(int inventory_index)
         if (item->get_flat_stats().mp)
             std::cout << "MP + " << item->get_flat_stats().mp << std::endl;
         if (item->get_flat_stats().cri)
-            std::cout << "크리티컬 확률 + " << item->get_flat_stats().cri << std::endl;
+            std::cout << "치명타 확률 + " << item->get_flat_stats().cri << "%" << std::endl;
+        if (item->get_flat_stats().criDamage)
+            std::cout << "치명타 데미지 + " << static_cast<int>(item->get_flat_stats().criDamage * 100) << "%" << std::endl;
         if (item->get_flat_stats().speed)
             std::cout << "스피드 + " << item->get_flat_stats().speed << std::endl;
     }

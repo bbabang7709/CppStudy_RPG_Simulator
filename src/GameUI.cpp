@@ -4,6 +4,7 @@
  ******************************************/
 #include "GameUI.h"
 #include "Player.h"
+#include "Monster.h"
 #include "ExpTable.h"
 #include <iostream>
 #include <chrono>
@@ -79,6 +80,7 @@ void GameUI::print_playerInfo(const Player &player)
     std::cout << "방어력 : " << stats.defend << std::endl;
     std::cout << "활력 : " << stats.vigor << std::endl;
     std::cout << "치명타 확률 : " << stats.cri << "%" << std::endl;
+    std::cout << "치명타 데미지 : " << static_cast<int>(stats.criDamage * 100) << "%" << std::endl;
     std::cout << "속도 : " << stats.speed << std::endl << std::endl;
     std::cout << "무기 : " << player.get_weapon_name();
     if (player.get_my_weapon()) {
@@ -104,9 +106,10 @@ void GameUI::print_normal_monster_selection_menu()
 {
     std::cout << "======== 몬스터 선택 ========" << std::endl;
     std::cout << "0. 돌아가기" << std::endl;
-    std::cout << "1. 슬라임" << std::endl;
-    std::cout << "2. 고블린" << std::endl;
-    std::cout << "3. 오크" << std::endl;
+    std::cout << "1. 훈련용 짚인형" << std::endl;
+    std::cout << "2. 슬라임" << std::endl;
+    std::cout << "3. 고블린" << std::endl;
+    std::cout << "4. 오크" << std::endl;
     std::cout << "============================" << std::endl;
     std::cout << "입력 >>> ";
 }

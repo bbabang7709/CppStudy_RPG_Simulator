@@ -14,8 +14,8 @@ NormalArmor::NormalArmor() : Armor(ItemDatabase::get(ItemID::NormalArmor))
 
 GoblinArmor::GoblinArmor() : Armor(ItemDatabase::get(ItemID::GoblinArmor))
 {
-    flat_stats.hp = 25;
-    flat_stats.defend = 7;
+    flat_stats.hp = 30;
+    flat_stats.defend = 10;
     flat_stats.vigor = 5;
 }
 

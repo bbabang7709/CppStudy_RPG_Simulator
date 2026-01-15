@@ -5,7 +5,16 @@
 #include "Equipment.h"
 
 
-Equipment::Equipment(const ItemData &data) : Item(data) {}
+Equipment::Equipment(const ItemData &data) : Item(data) 
+{
+    flat_stats.power = 0;
+    flat_stats.defend = 0;
+    flat_stats.hp = 0;
+    flat_stats.mp = 0;
+    flat_stats.cri = 0;
+    flat_stats.criDamage = 0;
+    flat_stats.speed = 0;
+}
 
 const StatBlock Equipment::get_flat_stats() const 
 { 

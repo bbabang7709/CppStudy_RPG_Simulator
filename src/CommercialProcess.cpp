@@ -16,7 +16,7 @@ void CommercialProcess::shop_process(Player &player)
     while (true)
     {
         UI.print_shop_menu();
-        c1 = safe_int_input();
+        c1 = safe_int_input_without_enter();
         if (c1 == 0) 
             break;
         else if (c1 == 1) {
@@ -67,7 +67,7 @@ void CommercialProcess::forge_process(Player &player)
     {
         clear_screen();
         UI.print_forge_menu();
-        c = safe_int_input();
+        c = safe_int_input_without_enter();
         if (c == 0)
             break;
         else if (c == 1) {
@@ -92,7 +92,7 @@ void CommercialProcess::run(Player &player)
     {
         clear_screen();
         UI.print_commercialArea_menu();
-        CommercialSelect choice = static_cast<CommercialSelect>(safe_int_input());
+        CommercialSelect choice = static_cast<CommercialSelect>(safe_int_input_without_enter());
         switch (choice)
         {
         case CommercialSelect::Exit :

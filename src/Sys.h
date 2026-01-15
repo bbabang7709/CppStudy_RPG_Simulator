@@ -7,8 +7,10 @@
 class Sys
 {
 public :
-    void clear_screen();
-    void delay(int milliseconds);
-    int safe_int_input();
-    int safe_int_input(int min, int max);
+    static void clear_screen();
+    static void delay(int milliseconds);
+    static int safe_int_input();
+    static int safe_int_input(int min, int max);
+    static int safe_int_input_without_enter();
+    static int safe_int_input_without_enter(int min, int max);
 };

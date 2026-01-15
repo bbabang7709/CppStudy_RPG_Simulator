@@ -6,14 +6,15 @@
 #include "WeaponList.h"
 #include "ArmorList.h"
 #include "MeterialList.h"
+#include "Random.h"
 #include <iostream>
 
-Dragon::Dragon() : Monster("드래곤", 1000, 100)
+Dragon::Dragon() : Monster("드래곤", 5000, 500)
 {
-    base_stats.hp = 500;
-    base_stats.mp = 5;
-    base_stats.power = 60;
-    base_stats.defend = 15;
+    base_stats.hp = 4000;
+    base_stats.mp = 10;
+    base_stats.power = 180;
+    base_stats.defend = 60;
     base_stats.vigor = 30;
     base_stats.cri = 0;
     base_stats.speed = 0;
@@ -33,18 +34,31 @@ const std::vector<DropItem> &Dragon::get_drop_table() const
 {
     return drop_table;
 }
-void Dragon::special_pattern(Character &target)
+void Dragon::take_turn(BattleContext &context)
 {
-    std::cout << "드 "; system.delay(300);
-    std::cout << "레 "; system.delay(300);
-    std::cout << "곤 "; system.delay(300);
-    std::cout << "브 "; system.delay(300);
-    std::cout << "레 "; system.delay(300);
-    std::cout << "스 "; system.delay(300);
+    int roll = Random::range(1, 100);
+    if (roll <= 70) {
+        this->basic_attack(context.player);
+    } else if (roll <= 90) {
+        this->basic_defend();
+    } else {
+        this->dragon_breathe(context.player);
+    }
+}
+
+
+void Dragon::dragon_breathe(Player &target)
+{
+    std::cout << "드 "; Sys::delay(300);
+    std::cout << "레 "; Sys::delay(300);
+    std::cout << "곤 "; Sys::delay(300);
+    std::cout << "브 "; Sys::delay(300);
+    std::cout << "레 "; Sys::delay(300);
+    std::cout << "스 "; Sys::delay(300);
     for (int i = 0; i < 5; i++) {
             std::cout << "!";
-            system.delay(300);
+            Sys::delay(300);
     }
-    int dmg = target.take_damage(120);
+    int dmg = target.take_damage(this->get_final_stats().power * 5);
     std::cout << "플레이어는 " << dmg << " 데미지를 입었다!!" << std::endl;   
 }

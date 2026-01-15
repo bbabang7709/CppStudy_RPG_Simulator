@@ -6,8 +6,9 @@
 
 #include "Sys.h"
 #include "Player.h"
-#include "Monster.h"
 #include <string>
+
+class Monster;
 
 class GameUI : public Sys
 {
